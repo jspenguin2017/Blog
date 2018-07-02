@@ -1,5 +1,6 @@
 {
   "csp": "default-src 'self';",
+  "suffix": "Hugo Xu",
   "pages": [
     {
       "title": "Test Page",

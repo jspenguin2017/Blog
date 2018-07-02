@@ -39,18 +39,21 @@ const main = async () => {
     let index = await fs.readFile("./src/index.html", "utf8")
     index = index
         .replace("{{csp}}", config.csp)
+        .replace("{{title-suffix}}", config.suffix)
         .replace("{{content}}", index_content(config));
     await fs.writeFile("./docs/index.html", index, "utf8");
 
     let template = await fs.readFile("./src/page.html", "utf8");
-    template = template.replace("{{csp}}", config.csp);
+    template = template
+        .replace("{{csp}}", config.csp)
+        .replace("{{title-suffix}}", config.suffix);
 
     for (const page of config.pages) {
         let content = await fs.readFile("./src/pages/" + page.src + ".MD", "utf8");
         content = converter.makeHtml(content);
 
         let output = template
-            .replace("{{title}}", "Blog - " + page.title)
+            .replace("{{title}}", page.title)
             .replace("{{content}}", content);
         await fs.writeFile("./docs/" + page.src + ".html", output, "utf8");
     }
