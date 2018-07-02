@@ -7,10 +7,10 @@ so let's go!
 ## Letter
 
 This is the first beginner's quest and is extremely easy. The attached ZIP file
-contains a PDF file, opening it shows a letter with username and password
-blacked out. However, the text can be selected. Selecting and pasting
-everything into an empty document reveals the password: `CTF{ICanReadDis}`.
-And that is the flag.
+contains a PDF file, opening it with Chromium browser shows a letter with
+username and password blacked out. However, the text can be selected. Selecting
+and pasting everything into an empty document reveals the password:
+`CTF{ICanReadDis}`. And that is the flag.
 
 ## Floppy
 
@@ -88,11 +88,60 @@ And indeed, the flag is recovered.
 
 ## Security by Obscurity
 
-Under construction... Come back later!
+Like the Floppy quest, 7-Zip isn't fooled by the random file extensions. After
+opening a zillion layers of archive folder, a `password.txt` is revealed.
+However, it is password protected.
+
+The password should be pretty weak. To crack it, the innermost archive needs
+to be extracted. This can be done easily by navigating to the upper directory
+and dragging `password.x` out.
+
+After a quick Google search, `fcrackzip` should be the utility to use:
+
+```
+$ fcrackzip
+The program 'fcrackzip' is currently not installed. You can install it by typing:
+apt install fcrackzip
+$ sudo apt install fcrackzip
+[...]
+$ man fcrackzip
+[...]
+NAME
+       fcrackzip - a Free/Fast Zip Password Cracker
+
+SYNOPSIS
+       fcrackzip  [-bDBchVvplum2]  [--brute-force]  [--dictionary]  [--benchmark]  [--charset  characterset] [--help]
+       [--validate] [--verbose]  [--init-password  string/path]  [--length  min-max]  [--use-unzip]  [--method  name]
+       [--modulo r/m] file...
+[...]
+```
+
+Let's try it:
+
+```
+$ fcrackzip --brute-force --charset aA1 --length 1-5 --use-unzip password.x
+PASSWORD FOUND!!!!: pw == asdf
+```
+
+It only took a few seconds to find the password, and the flag is in the text
+file: `CTF{CompressionIsNotEncryption}`.
 
 ## Floppy 2
 
-Under construction... Come back later!
+Opening `www.com` file shows two lines of ASCII text. COM files are executable
+files for MS-DOS, so I installed DOSBox and ran the file, it printed out one
+line:
+
+```
+The Foobanizer9000 is no longer on the OffHub DMZ.
+```
+
+Hum, no flag... What's in the memory? A memory dump can be easily created with
+Task Manager. After opening the dump file with Notepad++, it is not hard to
+find the flag with the search function: `CTF{g00do1dDOS-FTW}`.
+
+Note that I completed this quest on a Windows 10 device as I thought that would
+be easier, but it didn't really matter at the end.
 
 ## That's It for Now
 
