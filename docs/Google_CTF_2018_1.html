@@ -32,17 +32,16 @@ username and password blacked out. However, the text can be selected. Selecting
 and pasting everything into an empty document reveals the password:
 <code>CTF{ICanReadDis}</code>. And that is the flag.</p>
 <h2 id="floppy">Floppy</h2>
-<p>Like before, the attachment is a ZIP file, opening it with 7-Zip shows that it
-contains just one file: <code>foo.ico</code>. However, double-clicking on <code>foo.ico</code> would
-open it like a folder, which reveals 2 files: <code>driver.txt</code> and <code>www.com</code>.
+<p>Like before, the attachment is a ZIP file, opening it with 7-Zip, it only
+contains one file: <code>foo.ico</code>. However, double-clicking on <code>foo.ico</code> would
+open it like a folder, which reveals 2 more files: <code>driver.txt</code> and <code>www.com</code>.
 Opening <code>driver.txt</code>, it shows:</p>
 <pre><code>This is the driver for the Aluminum-Key Hardware password storage device.
      CTF{qeY80sU6Ktko8BJW}
 
 In case of emergency, run www.com
 </code></pre>
-<p>And there is the flag. What's in <code>www.com</code>? Well, that needs to wait for
-later.</p>
+<p>And there's the flag. What's in <code>www.com</code>? Well, that needs to wait for later.</p>
 <h2 id="ocriscool">OCR is Cool</h2>
 <p>This time, the ZIP attachment contains a PNG file, it is the screenshot of an
 email, but the text is all gibberish. The quest prompt says:</p>
@@ -69,15 +68,15 @@ take long to spot a fishy string in the screenshot. The resolution of the image
 is not great, so let's OCR it manually:</p>
 <pre><code>VMY{vtxltkvbiaxkbltlnulmbmnmbhgvbiaxk}
 </code></pre>
-<p>The difference between <code>C</code> and <code>V</code> is 19, let's try it:</p>
+<p>The difference between <code>C</code> and <code>V</code> is 19:</p>
 <pre><code>$ caesar 19
 VMY{vtxltkvbiaxkbltlnulmbmnmbhgvbiaxk}
 OFR{omqemdoubtqduemegnefufgfuazoubtqd}
 </code></pre>
-<p>Hum, doesn't look right. Since we are trying to decrypt the cypher, it needs
-to be rotated backward, but since there are 26 letters in the alphabet,
-rotating forward <code>26 - 19 = 7</code> times should be equivalent as rotating backwards
-19 times. Let's try it:</p>
+<p>Hum, doesn't look right. 19 rotations forward is for encryption, but for
+decryption, the rotations need to be backward. Since there are 26 letters in
+the alphabet, rotating forward <code>26 - 19 = 7</code> times should be equivalent as
+rotating backwards 19 times:</p>
 <pre><code>$ caesar 7
 VMY{vtxltkvbiaxkbltlnulmbmnmbhgvbiaxk}
 CTF{caesarcipherisasubstitutioncipher}
@@ -85,12 +84,12 @@ CTF{caesarcipherisasubstitutioncipher}
 <p>And indeed, the flag is recovered.</p>
 <h2 id="securitybyobscurity">Security by Obscurity</h2>
 <p>Like the Floppy quest, 7-Zip isn't fooled by the random file extensions. After
-opening a zillion layers of archive folder, a <code>password.txt</code> file is revealed.
+opening a zillion layers of archive folders, a <code>password.txt</code> file is revealed.
 However, it is password protected.</p>
 <p>The password should be pretty weak. To crack it, the innermost archive needs
-to be extracted. This can be done easily by navigating to the upper directory
-and dragging <code>password.x</code> out. And after a quick Google search, <code>fcrackzip</code>
-should be the utility to use:</p>
+to be extracted first. This can be done easily by navigating to the upper
+directory and dragging <code>password.x</code> out. And after a quick Google search,
+<code>fcrackzip</code> should be the utility to use:</p>
 <pre><code>$ fcrackzip
 The program 'fcrackzip' is currently not installed. You can install it by typing:
 apt install fcrackzip
@@ -114,16 +113,16 @@ PASSWORD FOUND!!!!: pw == asdf
 <p>It only took a few seconds to find the password, and the flag is right there
 in <code>password.txt</code>: <code>CTF{CompressionIsNotEncryption}</code>.</p>
 <h2 id="floppy2">Floppy 2</h2>
-<p>Opening <code>www.com</code> file shows two lines of ASCII text, but nothing looks like a
-flag. COM files are executable files for MS-DOS, so I installed DOSBox and ran
-the file, it printed out one line:</p>
+<p>Opening <code>www.com</code> file, two lines of ASCII text are shown, but nothing looks
+like a flag. COM files are executable files for MS-DOS, so I installed DOSBox
+and ran the file, it printed out one line:</p>
 <pre><code>The Foobanizer9000 is no longer on the OffHub DMZ.
 </code></pre>
 <p>Hum, still no flag… What's in the memory? A memory dump can be easily created
-with Task Manager. After opening the dump file with Notepad++, it is not hard
+with Task Manager. After opening the dump file with Notepad++, it's not hard
 to find the flag with the search function: <code>CTF{g00do1dDOS-FTW}</code>.</p>
 <p>Note that I completed this quest on a Windows 10 device as I thought that would
-be easier, but it didn't really matter at the end.</p>
+be easier, but it didn't really matter in the end.</p>
 <h2 id="thatsitfornow">That's It for Now</h2>
 <p>That's all for now. I will certainly look into other quests later. In the
 meantime, why don't you go try them out yourself?</p></div>
