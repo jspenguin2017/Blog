@@ -70,10 +70,6 @@ const main = async () => {
         .replace("{{title-suffix}}", config.suffix);
 
     for (const page of config.pages) {
-        if (!page.published) {
-            continue;
-        }
-
         let content = await fs.readFile("./src/pages/" + page.src + ".MD", "utf8");
         content = converter.makeHtml(content);
 

