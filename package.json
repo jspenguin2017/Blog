@@ -1,0 +1,19 @@
+{
+  "author": "jspenguin2017",
+  "bugs": {
+    "url": "https://github.com/jspenguin2017/Blog/issues"
+  },
+  "dependencies": {
+    "showdown": "~1.8.6"
+  },
+  "description": "Blog builder",
+  "engines": {
+    "node": ">=10.5.0"
+  },
+  "homepage": "https://blog.jspenguin.com/",
+  "license": "GPL-3.0",
+  "name": "blog-build",
+  "private": true,
+  "repository": "https://github.com/jspenguin2017/Blog",
+  "version": "1.0.0"
+}
