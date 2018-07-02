@@ -65,7 +65,7 @@ is not great, so let's OCR it manually:
 VMY{vtxltkvbiaxkbltlnulmbmnmbhgvbiaxk}
 ```
 
-The difference from `V` to `C` is 19, let's try it:
+The difference between `C` and `V` is 19, let's try it:
 
 ```
 $ caesar 19
