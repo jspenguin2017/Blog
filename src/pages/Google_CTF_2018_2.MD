@@ -245,3 +245,28 @@ e66860546f18cdbbcd86b35e18b525bffc67f772c650cedfe3ff7a0026fa1dee
 ```
 
 Putting it into Google, `Passw0rd!` comes out, so the flag is `CTF{Passw0rd!}`.
+
+## Router-UI
+
+I personally find this to be pretty difficult for a beginner's quest. You also
+need a private server to complete this quest. The quest prompt reads:
+
+```
+[...]
+If we could find an XSS on the page then we could use it to steal the root
+user session token. In case you find something, try to send an email to
+wintermuted@googlegroups.com. If you claim your link includes cat pictures,
+I'm sure Wintermuted will click it. I hope Chrome's XSS filter will not block
+the exploit though.
+```
+
+The XSS on the page is pretty obvious, but Chrome's XSS Auditor is pretty
+solid. A simple `<script>` tag inserted to `username` field would be enough
+to inject my exploit script to Firefox, but I don't think I can convince
+Wintermuted to use Firefox.
+
+I tried splitting `<script>` tag to both field, but Chrome somehow still caught
+that. I also tried `onerror` of `<img>` tag, nothing. After observing the
+server response closely, `//` is added in between `username` and `password`,
+and Chrome woudln't catch it if it is used as part of URL.
+

@@ -219,7 +219,25 @@ like this:</p>
 to the console:</p>
 <pre><code>e66860546f18cdbbcd86b35e18b525bffc67f772c650cedfe3ff7a0026fa1dee
 </code></pre>
-<p>Putting it into Google, <code>Passw0rd!</code> comes out, so the flag is <code>CTF{Passw0rd!}</code>.</p></div>
+<p>Putting it into Google, <code>Passw0rd!</code> comes out, so the flag is <code>CTF{Passw0rd!}</code>.</p>
+<h2 id="routerui">Router-UI</h2>
+<p>I personally find this to be pretty difficult for a beginner's quest. You also
+need a private server to complete this quest. The quest prompt reads:</p>
+<pre><code>[...]
+If we could find an XSS on the page then we could use it to steal the root
+user session token. In case you find something, try to send an email to
+wintermuted@googlegroups.com. If you claim your link includes cat pictures,
+I'm sure Wintermuted will click it. I hope Chrome's XSS filter will not block
+the exploit though.
+</code></pre>
+<p>The XSS on the page is pretty obvious, but Chrome's XSS Auditor is pretty
+solid. A simple <code>&lt;script&gt;</code> tag inserted to <code>username</code> field would be enough
+to inject my exploit script to Firefox, but I don't think I can convince
+Wintermuted to use Firefox.</p>
+<p>I tried splitting <code>&lt;script&gt;</code> tag to both field, but Chrome somehow still caught
+that. I also tried <code>onerror</code> of <code>&lt;img&gt;</code> tag, nothing. After observing the
+server response closely, <code>//</code> is added in between <code>username</code> and <code>password</code>,
+and Chrome woudln't catch it if it is used as part of URL.</p></div>
 
     <div class="container footer">
         <p>By Hugo Xu (@jspenguin2017)</p>
