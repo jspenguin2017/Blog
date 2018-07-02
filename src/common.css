@@ -1,0 +1,133 @@
+/**
+ * Common stylesheet.
+ */
+
+/* General */
+* {
+    font-family: Arial, sans-serif;
+}
+
+body {
+    margin: 0px;
+}
+
+@media (min-width: 600px) {
+    h1 {
+        font-size: 3em;
+    }
+
+    h2 {
+        font-size: 2.25em;
+    }
+
+    h3 {
+        font-size: 1.755em;
+    }
+
+    h4 {
+        font-size: 1.5em;
+    }
+
+    h5 {
+        font-size: 1.245em;
+    }
+
+    h6 {
+        font-size: 1.005em;
+    }
+
+    p {
+        font-size: 1.5em;
+    }
+}
+
+/* Basic */
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.clear {
+    clear: both;
+}
+
+/* Navigation bar */
+.navbar {
+    background-color: #F8F8F8;
+    height: 60px;
+}
+
+    .navbar .title {
+        color: #5E5E5E;
+        display: inline-block;
+        font-size: 1.2em;
+        font-weight: bold;
+        margin: 0px;
+        padding: 19px 25px 19px 2px;
+    }
+
+    .navbar .item {
+        color: #000000;
+        font-weight: bold;
+        opacity: 0.5;
+        text-decoration: none;
+        user-select: none;
+    }
+
+        .navbar .item:hover {
+            opacity: 0.75;
+        }
+
+        .navbar .item:active {
+            opacity: 1;
+        }
+
+        .navbar .item.disabled {
+            opacity: 0.5;
+        }
+
+    .navbar > .left {
+        margin-left: 10px;
+    }
+
+    .navbar > .right {
+        margin-right: 10px;
+    }
+
+@media (min-width: 600px) {
+    .navbar > .left {
+        margin-left: 10%;
+    }
+
+    .navbar > .right {
+        margin-right: 10%;
+    }
+}
+
+/* Containers */
+.container {
+    margin: 20px 0px;
+    padding: 10px;
+}
+
+@media (min-width: 600px) {
+    .container {
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+}
+
+.container.footer {
+    background-color: #FFFFFF;
+    margin: 0px;
+    padding-bottom: 0px;
+    padding-top: 0px;
+}
+
+    .container.footer p {
+        color: #808080;
+        font-size: 0.8em;
+    }
