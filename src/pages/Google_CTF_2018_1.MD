@@ -32,7 +32,7 @@ later.
 ## OCR is Cool
 
 This time, the ZIP attachment contains a PNG file, it is the screenshot of an
-email, but the test is all gibberish. The quest prompt says:
+email, but the text is all gibberish. The quest prompt says:
 
 ```
 Caesar once said, don't stab me... [...]
@@ -58,9 +58,8 @@ SYNOPSIS
 
 Ah, caesar ciphers. It is a simple (and unsafe) encryption algorithm that
 rotates the alphabet. Since the flag should look like `CTF{...}`, it doesn't
-take long to spot a fishy string in the screenshot.
-
-The resolution of the image is not great, so let's OCR it manually:
+take long to spot a fishy string in the screenshot. The resolution of the image
+is not great, so let's OCR it manually:
 
 ```
 VMY{vtxltkvbiaxkbltlnulmbmnmbhgvbiaxk}
@@ -95,7 +94,7 @@ Under construction... Come back later!
 
 Under construction... Come back later!
 
-## That's it for now
+## That's It for Now
 
 That's all for now. I will certainly look into other challenges later. In the
 meantime, why don't you go try those challenges out yourself?

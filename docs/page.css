@@ -15,7 +15,7 @@ p {
 code {
     background-color: #F0F0F0;
     font-family: monospace;
-    padding: 3px;
+    padding: 3px 5px;
     position: relative;
     top: -1px;
 }
