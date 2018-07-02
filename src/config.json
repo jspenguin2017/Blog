@@ -3,9 +3,9 @@
   "suffix": "Hugo Xu",
   "pages": [
     {
-      "title": "Test Page",
-      "src": "TestPage",
-      "summary": "This is just a test page."
+      "title": "First Look at Google CTF 2018",
+      "src": "Google_CTF_2018_1",
+      "summary": "Overview of Google CTF 2018 and walkthrough of first few quests."
     }
   ]
 }

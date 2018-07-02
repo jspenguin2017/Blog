@@ -30,7 +30,7 @@ const index_content = (config) => {
         result += [
             '<div class="post">',
             '    <h3>',
-            '        <a href="' + page.src + '.html">' + page.title + '</a>' +
+            '        <a href="' + page.src + '.html">' + page.title + '</a>',
             '    </h3>',
             '    <br />',
             '    <p>' + page.summary + '</p>',
