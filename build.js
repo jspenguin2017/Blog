@@ -27,6 +27,10 @@ const index_content = (config) => {
     let result = "";
 
     for (const page of config.pages) {
+        if (!page.published) {
+            continue;
+        }
+
         result += [
             '<div class="post">',
             '    <h3>',
@@ -66,6 +70,10 @@ const main = async () => {
         .replace("{{title-suffix}}", config.suffix);
 
     for (const page of config.pages) {
+        if (!page.published) {
+            continue;
+        }
+
         let content = await fs.readFile("./src/pages/" + page.src + ".MD", "utf8");
         content = converter.makeHtml(content);
 

@@ -1,11 +1,22 @@
 {
   "csp": "default-src 'self';",
-  "suffix": "Hugo Xu",
   "pages": [
     {
-      "title": "First Look at Google CTF 2018",
+      "date": "2018.07.02",
+      "id": 2,
+      "published": false,
+      "src": "Google_CTF_2018_2",
+      "summary": "Five more beginner's quests walkthrough!",
+      "title": "Time For Moar Google CTF 2018"
+    },
+    {
+      "date": "2018.07.02",
+      "id": 1,
+      "published": true,
       "src": "Google_CTF_2018_1",
-      "summary": "Overview of Google CTF 2018 and walkthrough of the first few beginner's quests."
+      "summary": "Overview of Google CTF 2018 and walkthrough of the first five beginner's quests.",
+      "title": "First Look at Google CTF 2018"
     }
-  ]
+  ],
+  "suffix": "Hugo Xu"
 }
