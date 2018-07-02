@@ -9,6 +9,7 @@
  * @const {Module}
  */
 const fs = require("fs-extra");
+const os = require("os");
 const showdown = require("showdown");
 /**
  * Showdown converter.
@@ -34,7 +35,7 @@ const index_content = (config) => {
             '    <br />',
             '    <p>' + page.summary + '</p>',
             '</div>',
-        ].join("\n");
+        ].join(os.EOL);
     }
 
     return result;
