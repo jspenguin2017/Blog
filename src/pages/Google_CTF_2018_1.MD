@@ -144,5 +144,5 @@ be easier, but it didn't really matter at the end.
 
 ## That's It for Now
 
-That's all for now. I will certainly look into other challenges later. In the
-meantime, why don't you go try those challenges out yourself?
+That's all for now. I will certainly look into other quests later. In the
+meantime, why don't you go try them out yourself?
