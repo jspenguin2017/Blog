@@ -23,7 +23,21 @@ const converter = new showdown.Converter();
  * @return {string} The generated content
  */
 const index_content = (config) => {
-    return "TODO";
+    let result = "";
+
+    for (const page of config.pages) {
+        result += [
+            '<div class="post">',
+            '    <h3>',
+            '        <a href="' + page.src + '.html">' + page.title + '</a>' +
+            '    </h3>',
+            '    <br />',
+            '    <p>' + page.summary + '</p>',
+            '</div>',
+        ].join("\n");
+    }
+
+    return result;
 };
 
 /**
@@ -34,7 +48,9 @@ const main = async () => {
     let config = await fs.readFile("./src/config.json", "utf8");
     config = JSON.parse(config);
 
-    await fs.copy("./src/common.css", "./docs/common.css");
+    await fs.copy("./src/css/common.css", "./docs/common.css");
+    await fs.copy("./src/css/index.css", "./docs/index.css");
+    await fs.copy("./src/css/page.css", "./docs/page.css");
 
     let index = await fs.readFile("./src/index.html", "utf8")
     index = index

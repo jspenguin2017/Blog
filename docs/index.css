@@ -1,0 +1,21 @@
+/**
+ * Index page stylesheet.
+ */
+
+.container {
+    padding-bottom: 1px;
+}
+
+.post {
+    background-color: #F0F0F0;
+    margin-bottom: 9px;
+    padding: 12px;
+}
+
+    .post:hover {
+        background-color: #F5F5F5;
+    }
+
+    .post * {
+        margin: 0px;
+    }

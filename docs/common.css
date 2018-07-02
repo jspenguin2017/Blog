@@ -11,36 +11,6 @@ body {
     margin: 0px;
 }
 
-@media (min-width: 600px) {
-    h1 {
-        font-size: 3em;
-    }
-
-    h2 {
-        font-size: 2.25em;
-    }
-
-    h3 {
-        font-size: 1.755em;
-    }
-
-    h4 {
-        font-size: 1.5em;
-    }
-
-    h5 {
-        font-size: 1.245em;
-    }
-
-    h6 {
-        font-size: 1.005em;
-    }
-
-    p {
-        font-size: 1.5em;
-    }
-}
-
 /* Basic */
 .left {
     float: left;
@@ -67,6 +37,7 @@ body {
         font-weight: bold;
         margin: 0px;
         padding: 19px 25px 19px 2px;
+        user-select: none;
     }
 
     .navbar .item {

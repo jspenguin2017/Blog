@@ -4,7 +4,8 @@
   "pages": [
     {
       "title": "Test Page",
-      "src": "TestPage"
+      "src": "TestPage",
+      "summary": "This is just a test page."
     }
   ]
 }
