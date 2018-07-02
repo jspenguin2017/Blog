@@ -1,0 +1,9 @@
+{
+  "csp": "default-src 'self';",
+  "pages": [
+    {
+      "title": "",
+      "src": ""
+    }
+  ]
+}
