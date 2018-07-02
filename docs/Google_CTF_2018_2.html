@@ -22,11 +22,11 @@
     </div>
 
     <div class="container"><h1 id="timeformoargooglectf2018">Time For Moar Google CTF 2018</h1>
-<p><a href="Google_CTF_2018_1.html">Last time</a>, I explored the first five quests of Google
-CTF 2018, and now, it's time for MOAR!</p>
+<p><a href="Google_CTF_2018_1.html">Last time</a>, I explored the first five beginner's
+quests of Google CTF 2018, and now, it's time for MOAR!</p>
 <h2 id="moar">Moar</h2>
-<p>The quest prompt gave a <code>netcat</code> address, let's connect and see what's over on
-the other side:</p>
+<p>The quest prompt gave a <code>netcat</code> server address, let's connect and see what's
+over on the other side:</p>
 <pre><code>$ nc moar.ctfcompetition.com 1337
 [...]
 NAME
@@ -41,13 +41,14 @@ SYNOPSIS
 [...]
 </code></pre>
 <p>It is the <code>man</code> page for <code>socat</code>, over the pager <code>less</code>. Tying <code>q</code> would drop
-the connection. Let's check the help page:</p>
+the connection. What about <code>h</code>? It opens the help text, but it is too hard to
+read over <code>netcat</code>. I opened a local copy of <code>less</code> and found:</p>
 <pre><code>[...]
   !command             Execute the shell command with $SHELL.
   |Xcommand            Pipe file between current pos &amp; mark X to shell command.
 [...]
 </code></pre>
-<p>Oh, that looks interesting, let's try it:</p>
+<p>Time to try it:</p>
 <pre><code>$ nc moar.ctfcompetition.com 1337
 ! ls /
 bin   dev  home  lib64  mnt  proc  run   srv  tmp  var
@@ -64,7 +65,7 @@ Disabling DMZ using password CTF{SOmething-CATastr0phic}
 </code></pre>
 <p>And there is the flag.</p>
 <h2 id="adminui">Admin UI</h2>
-<p>Another remote exploitation quest, let's connect:</p>
+<p>Another remote exploitation quest:</p>
 <pre><code>$ nc mngmnt-iface.ctfcompetition.com 1337
 === Management Interface ===
  1) Service access
@@ -77,7 +78,7 @@ Please enter the backdoo^Wservice password:
 abcd
 Incorrect, the authorities have been informed!
 </code></pre>
-<p>Ops, that didn't work. What are in the patch notes?</p>
+<p>Ops, that's not good. What's in the patch notes?</p>
 <pre><code>[...]
 2
 The following patchnotes were found:
@@ -114,20 +115,20 @@ bin:x:2:2:bin:/bin:/usr/sbin/nologin
 sys:x:3:3:sys:/dev:/usr/sbin/nologin
 [...]
 </code></pre>
-<p>Oh, it works! Let's see if we can find flag with path traversal:</p>
+<p>Oh, it works!</p>
 <pre><code>[...]
 ../flag
 CTF{I_luv_buggy_sOFtware}
 </code></pre>
 <h2 id="jssafe">JS Safe</h2>
-<p>The ZIP file only contains a HTML file. Opening it reveals some HTML, CSS, and
+<p>The ZIP file only contains an HTML file. Opening it reveals some HTML, CSS, and
 two <code>&lt;script&gt;</code> tags. The second one seems to be just the basic functionality of
 the webpage, and the first one is the one to investigate. Also, it looks like
-the password to the safe is also the flag, as the following regular expression
-is in the second script tag:</p>
+the password to the safe is also the flag because the following regular
+expression is in the second script tag:</p>
 <pre><code class="JavaScript language-JavaScript">  password = /^CTF{([0-9a-zA-Z_@!?-]+)}$/.exec(keyhole.value);
 </code></pre>
-<p>The first script block looks like this:</p>
+<p>The first script block is (somewhat) obfuscated:</p>
 <pre><code class="JavaScript language-JavaScript">async function x(password) {
     // TODO: check if they can just use Google to get the password once they understand how this works.
     var code = '&lt;long string removed&gt;'
@@ -152,7 +153,9 @@ is in the second script tag:</p>
     }
     return !env.h;
 }
-</code></pre></div>
+</code></pre>
+<p>I would assume the password is pretty long and a brute-force attack will not
+work until I can narrow the key space down.</p></div>
 
     <div class="container footer">
         <p>By Hugo Xu (@jspenguin2017)</p>

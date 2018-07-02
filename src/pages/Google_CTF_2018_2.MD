@@ -1,12 +1,12 @@
 # Time For Moar Google CTF 2018
 
-[Last time](Google_CTF_2018_1.html), I explored the first five quests of Google
-CTF 2018, and now, it's time for MOAR!
+[Last time](Google_CTF_2018_1.html), I explored the first five beginner's
+quests of Google CTF 2018, and now, it's time for MOAR!
 
 ## Moar
 
-The quest prompt gave a `netcat` address, let's connect and see what's over on
-the other side:
+The quest prompt gave a `netcat` server address, let's connect and see what's
+over on the other side:
 
 ```
 $ nc moar.ctfcompetition.com 1337
@@ -24,7 +24,8 @@ SYNOPSIS
 ```
 
 It is the `man` page for `socat`, over the pager `less`. Tying `q` would drop
-the connection. Let's check the help page:
+the connection. What about `h`? It opens the help text, but it is too hard to
+read over `netcat`. I opened a local copy of `less` and found:
 
 ```
 [...]
@@ -33,7 +34,7 @@ the connection. Let's check the help page:
 [...]
 ```
 
-Oh, that looks interesting, let's try it:
+Time to try it:
 
 ```
 $ nc moar.ctfcompetition.com 1337
@@ -55,7 +56,7 @@ And there is the flag.
 
 ## Admin UI
 
-Another remote exploitation quest, let's connect:
+Another remote exploitation quest:
 
 ```
 $ nc mngmnt-iface.ctfcompetition.com 1337
@@ -71,7 +72,7 @@ abcd
 Incorrect, the authorities have been informed!
 ```
 
-Ops, that didn't work. What are in the patch notes?
+Ops, that's not good. What's in the patch notes?
 
 ```
 [...]
@@ -114,7 +115,7 @@ sys:x:3:3:sys:/dev:/usr/sbin/nologin
 [...]
 ```
 
-Oh, it works! Let's see if we can find flag with path traversal:
+Oh, it works!
 
 ```
 [...]
@@ -124,17 +125,17 @@ CTF{I_luv_buggy_sOFtware}
 
 ## JS Safe
 
-The ZIP file only contains a HTML file. Opening it reveals some HTML, CSS, and
+The ZIP file only contains an HTML file. Opening it reveals some HTML, CSS, and
 two `<script>` tags. The second one seems to be just the basic functionality of
 the webpage, and the first one is the one to investigate. Also, it looks like
-the password to the safe is also the flag, as the following regular expression
-is in the second script tag:
+the password to the safe is also the flag because the following regular
+expression is in the second script tag:
 
 ```JavaScript
   password = /^CTF{([0-9a-zA-Z_@!?-]+)}$/.exec(keyhole.value);
 ```
 
-The first script block looks like this:
+The first script block is (somewhat) obfuscated:
 
 ```JavaScript
 async function x(password) {
@@ -162,3 +163,8 @@ async function x(password) {
     return !env.h;
 }
 ```
+
+I would assume the password is pretty long and a brute-force attack will not
+work until I can narrow the key space down.
+
+
