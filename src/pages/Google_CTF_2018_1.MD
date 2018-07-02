@@ -6,7 +6,7 @@ so let's go!
 
 ## Letter
 
-This is the first biginner's quest and is extremely easy. The attached ZIP file
+This is the first beginner's quest and is extremely easy. The attached ZIP file
 contains a PDF file, opening it shows a letter with username and password
 blacked out. However, the text can be selected. Selecting and pasting
 everything into an empty document reveals the password: `CTF{ICanReadDis}`.
@@ -16,8 +16,8 @@ And that is the flag.
 
 Like before, the attachment is a ZIP file, opening it with 7-Zip shows that it
 contains just one file: `foo.ico`. However, double-clicking on `foo.ico` would
-open it like a folder, and reveals 2 files: `driver.txt` and `www.com`. Opening
-`driver.txt`, it shows:
+open it like a folder, which reveals 2 files: `driver.txt` and `www.com`.
+Opening `driver.txt`, it shows:
 
 ```
 This is the driver for the Aluminum-Key Hardware password storage device.
@@ -57,7 +57,7 @@ SYNOPSIS
 ```
 
 Ah, caesar ciphers. It is a simple (and unsafe) encryption algorithm that
-rorates the alphabet. Since the flag should look like `CTF{...}`, it doesn't
+rotates the alphabet. Since the flag should look like `CTF{...}`, it doesn't
 take long to spot a fishy string in the screenshot.
 
 The resolution of the image is not great, so let's OCR it manually:
