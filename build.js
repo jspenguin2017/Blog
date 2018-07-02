@@ -34,6 +34,8 @@ const main = async () => {
     let config = await fs.readFile("./src/config.json", "utf8");
     config = JSON.parse(config);
 
+    await fs.copy("./src/common.css", "./docs/common.css");
+
     let index = await fs.readFile("./src/index.html", "utf8")
     index = index
         .replace("{{csp}}", config.csp)
