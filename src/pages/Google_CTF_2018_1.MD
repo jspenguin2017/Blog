@@ -1,12 +1,12 @@
 # First Look at Google CTF 2018
 
 [The third annual Google CTF](https://security.googleblog.com/2018/05/google-ctf-2018-is-here.html)
-took place on June 23, 2018. And the quests are now
-available for everyone to try. The first few quests are very easy, so let's go!
+took place on June 23, 2018. The quests are now available for everyone to try,
+so let's go!
 
 ## Letter
 
-This is the first challenge and is extremely easy. The attached ZIP file
+This is the first biginner's quest and is extremely easy. The attached ZIP file
 contains a PDF file, opening it shows a letter with username and password
 blacked out. However, the text can be selected. Selecting and pasting
 everything into an empty document reveals the password: `CTF{ICanReadDis}`.
@@ -26,7 +26,74 @@ This is the driver for the Aluminum-Key Hardware password storage device.
 In case of emergency, run www.com
 ```
 
-And there is the flag.
+And there is the flag. What's in `www.com`? Well, that needs to wait for
+later.
+
+## OCR is Cool
+
+This time, the ZIP attachment contains a PNG file, it is the screenshot of an
+email, but the test is all gibberish. The quest prompt says:
+
+```
+Caesar once said, don't stab me... [...]
+```
+
+Caesar?
+
+```
+$ caesar
+The program 'caesar' is currently not installed. You can install it by typing:
+apt install bsdgames
+$ sudo apt install bsdgames
+[...]
+$ man caesar
+[...]
+NAME
+     caesar, rot13 — decrypt caesar ciphers
+
+SYNOPSIS
+     caesar [rotation]
+[...]
+```
+
+Ah, caesar ciphers. It is a simple (and unsafe) encryption algorithm that
+rorates the alphabet. Since the flag should look like `CTF{...}`, it doesn't
+take long to spot a fishy string in the screenshot.
+
+The resolution of the image is not great, so let's OCR it manually:
+
+```
+VMY{vtxltkvbiaxkbltlnulmbmnmbhgvbiaxk}
+```
+
+The difference from `V` to `C` is 19, let's try it:
+
+```
+$ caesar 19
+VMY{vtxltkvbiaxkbltlnulmbmnmbhgvbiaxk}
+OFR{omqemdoubtqduemegnefufgfuazoubtqd}
+```
+
+Hum, doesn't look right. Since we are trying to decrypt the cypher, it needs
+to be rotated backward, but since there are 26 letters in the alphabet,
+rotating forward `26 - 19 = 7` times should be equivalent as rotating backwards
+19 times. Let's try it:
+
+```
+$ caesar 7
+VMY{vtxltkvbiaxkbltlnulmbmnmbhgvbiaxk}
+CTF{caesarcipherisasubstitutioncipher}
+```
+
+And indeed, the flag is recovered.
+
+## Security by Obscurity
+
+Under construction... Come back later!
+
+## Floppy 2
+
+Under construction... Come back later!
 
 ## That's it for now
 

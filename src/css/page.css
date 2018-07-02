@@ -7,6 +7,32 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 p {
+    line-height: 1.5;
     margin-bottom: 1.2em;
     margin-top: 1.2em;
+}
+
+code {
+    background-color: #F0F0F0;
+    font-family: monospace;
+    padding: 3px;
+    position: relative;
+    top: -1px;
+}
+
+pre {
+    background-color: #F0F0F0;
+    overflow: auto;
+    padding: 5px;
+}
+
+    pre code {
+        padding: 0px;
+        top: 0px;
+    }
+
+.container {
+    background-color: #FCFCFC;
+    padding-bottom: 1px;
+    padding-top: 25px;
 }
