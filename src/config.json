@@ -2,8 +2,8 @@
   "csp": "default-src 'self';",
   "pages": [
     {
-      "title": "",
-      "src": ""
+      "title": "Test Page",
+      "src": "TestPage"
     }
   ]
 }

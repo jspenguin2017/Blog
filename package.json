@@ -4,6 +4,7 @@
     "url": "https://github.com/jspenguin2017/Blog/issues"
   },
   "dependencies": {
+    "fs-extra": "~6.0.1",
     "showdown": "~1.8.6"
   },
   "description": "Blog builder",
