@@ -154,8 +154,72 @@ expression is in the second script tag:</p>
     return !env.h;
 }
 </code></pre>
-<p>I would assume the password is pretty long and a brute-force attack will not
-work until I can narrow the key space down.</p></div>
+<p>The <code>code</code> string is pretty long, it's probably easier to log out what it does
+in runtime:</p>
+<pre><code class="JavaScript language-JavaScript">// [...]
+        try {
+            env[lhs] = env[fn](env[arg1], env[arg2]);
+            console.log("lhs", env[lhs], "func", env[fn], "args", env[arg1], env[arg2]);
+        } catch(e) {
+            env[lhs] = new env[fn](env[arg1], env[arg2]);
+            console.log("lhs", env[lhs], "new", env[fn], "args", env[arg1], env[arg2]);
+        }
+// [...]
+</code></pre>
+<p>Scrolling over the result, the string <code>sha-256</code> and <code>Uint8Array</code> of length 32
+should be big red flags. The array can be easily encoded to hexadecimal, save
+it as a temporary global variable, then run:</p>
+<pre><code class="JavaScript language-JavaScript">var temp2 = ""; temp1.forEach(x =&gt; { temp2 += x.toString(16).padStart(2, "0"); }); temp2
+</code></pre>
+<p>After searching the result in Google, it is the SHA-256 hash of the input.
+Observing the call log closely, it's easy to see that the code is looping over
+my SHA-256 array. It's time to add some code to trigger a breakpoint when <code>lhs</code>
+is <code>h</code>, the return value:</p>
+<pre><code class="JavaScript language-JavaScript">if (lhs === "h") debugger;
+</code></pre>
+<p>Each value in my SHA-256 array is XOR-ed by another value, then OR-ed into <code>h</code>,
+since the return value of function <code>x</code> would only be <code>true</code> if <code>h</code> is <code>0</code>, my
+SHA-256 array needs to match exactly their array. It's not hard to read out
+their array manually, but it's easier with some code, the final function looks
+like this:</p>
+<pre><code class="JavaScript language-JavaScript">async function x(password) {
+    // TODO: check if they can just use Google to get the password once they understand how this works.
+    var code = '&lt;long string removed&gt;';
+    var env = {
+        a: (x,y) =&gt; x[y],
+        b: (x,y) =&gt; Function.constructor.apply.apply(x, y),
+        c: (x,y) =&gt; x+y,
+        d: (x) =&gt; String.fromCharCode(x),
+        e: 0,
+        f: 1,
+        g: new TextEncoder().encode(password),
+        h: 0,
+    };
+    var result = [];
+    for (var i = 0; i &lt; code.length; i += 4) {
+        var [lhs, fn, arg1, arg2] = code.substr(i, 4);
+        try {
+            if (env[fn].toString().includes("x[0]^x[1]")) {
+                result.push(env[arg1][1]);
+            }
+            env[lhs] = env[fn](env[arg1], env[arg2]);
+            console.log("lhs", env[lhs], "func", env[fn], "args", env[arg1], env[arg2]);
+        } catch(e) {
+            env[lhs] = new env[fn](env[arg1], env[arg2]);
+            console.log("lhs", env[lhs], "new", env[fn], "args", env[arg1], env[arg2]);
+        }
+        if (env[lhs] instanceof Promise) env[lhs] = await env[lhs];
+    }
+    result = result.map(x =&gt; x.toString(16).padStart(2, "0"));
+    console.log(result.join(""));
+    return !env.h;
+}
+</code></pre>
+<p>Entering a random password like <code>CTF{abcd}</code>, a SHA-256 hashed value is logged
+to the console:</p>
+<pre><code>e66860546f18cdbbcd86b35e18b525bffc67f772c650cedfe3ff7a0026fa1dee
+</code></pre>
+<p>Putting it into Google, <code>Passw0rd!</code> comes out, so the flag is <code>CTF{Passw0rd!}</code>.</p></div>
 
     <div class="container footer">
         <p>By Hugo Xu (@jspenguin2017)</p>

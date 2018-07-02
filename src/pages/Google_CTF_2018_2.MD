@@ -164,7 +164,84 @@ async function x(password) {
 }
 ```
 
-I would assume the password is pretty long and a brute-force attack will not
-work until I can narrow the key space down.
+The `code` string is pretty long, it's probably easier to log out what it does
+in runtime:
 
+```JavaScript
+// [...]
+        try {
+            env[lhs] = env[fn](env[arg1], env[arg2]);
+            console.log("lhs", env[lhs], "func", env[fn], "args", env[arg1], env[arg2]);
+        } catch(e) {
+            env[lhs] = new env[fn](env[arg1], env[arg2]);
+            console.log("lhs", env[lhs], "new", env[fn], "args", env[arg1], env[arg2]);
+        }
+// [...]
+```
 
+Scrolling over the result, the string `sha-256` and `Uint8Array` of length 32
+should be big red flags. The array can be easily encoded to hexadecimal, save
+it as a temporary global variable, then run:
+
+```JavaScript
+var temp2 = ""; temp1.forEach(x => { temp2 += x.toString(16).padStart(2, "0"); }); temp2
+```
+
+After searching the result in Google, it is the SHA-256 hash of the input.
+Observing the call log closely, it's easy to see that the code is looping over
+my SHA-256 array. It's time to add some code to trigger a breakpoint when `lhs`
+is `h`, the return value:
+
+```JavaScript
+if (lhs === "h") debugger;
+```
+
+Each value in my SHA-256 array is XOR-ed by another value, then OR-ed into `h`,
+since the return value of function `x` would only be `true` if `h` is `0`, my
+SHA-256 array needs to match exactly their array. It's not hard to read out
+their array manually, but it's easier with some code, the final function looks
+like this:
+
+```JavaScript
+async function x(password) {
+    // TODO: check if they can just use Google to get the password once they understand how this works.
+    var code = '<long string removed>';
+    var env = {
+        a: (x,y) => x[y],
+        b: (x,y) => Function.constructor.apply.apply(x, y),
+        c: (x,y) => x+y,
+        d: (x) => String.fromCharCode(x),
+        e: 0,
+        f: 1,
+        g: new TextEncoder().encode(password),
+        h: 0,
+    };
+    var result = [];
+    for (var i = 0; i < code.length; i += 4) {
+        var [lhs, fn, arg1, arg2] = code.substr(i, 4);
+        try {
+            if (env[fn].toString().includes("x[0]^x[1]")) {
+                result.push(env[arg1][1]);
+            }
+            env[lhs] = env[fn](env[arg1], env[arg2]);
+            console.log("lhs", env[lhs], "func", env[fn], "args", env[arg1], env[arg2]);
+        } catch(e) {
+            env[lhs] = new env[fn](env[arg1], env[arg2]);
+            console.log("lhs", env[lhs], "new", env[fn], "args", env[arg1], env[arg2]);
+        }
+        if (env[lhs] instanceof Promise) env[lhs] = await env[lhs];
+    }
+    result = result.map(x => x.toString(16).padStart(2, "0"));
+    console.log(result.join(""));
+    return !env.h;
+}
+```
+
+Entering a random password like `CTF{abcd}`, a SHA-256 hashed value is logged
+to the console:
+
+```
+e66860546f18cdbbcd86b35e18b525bffc67f772c650cedfe3ff7a0026fa1dee
+```
+
+Putting it into Google, `Passw0rd!` comes out, so the flag is `CTF{Passw0rd!}`.
