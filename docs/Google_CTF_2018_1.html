@@ -85,12 +85,12 @@ CTF{caesarcipherisasubstitutioncipher}
 <p>And indeed, the flag is recovered.</p>
 <h2 id="securitybyobscurity">Security by Obscurity</h2>
 <p>Like the Floppy quest, 7-Zip isn't fooled by the random file extensions. After
-opening a zillion layers of archive folder, a <code>password.txt</code> is revealed.
+opening a zillion layers of archive folder, a <code>password.txt</code> file is revealed.
 However, it is password protected.</p>
 <p>The password should be pretty weak. To crack it, the innermost archive needs
 to be extracted. This can be done easily by navigating to the upper directory
-and dragging <code>password.x</code> out.</p>
-<p>After a quick Google search, <code>fcrackzip</code> should be the utility to use:</p>
+and dragging <code>password.x</code> out. And after a quick Google search, <code>fcrackzip</code>
+should be the utility to use:</p>
 <pre><code>$ fcrackzip
 The program 'fcrackzip' is currently not installed. You can install it by typing:
 apt install fcrackzip
@@ -111,17 +111,17 @@ SYNOPSIS
 <pre><code>$ fcrackzip --brute-force --charset aA1 --length 1-5 --use-unzip password.x
 PASSWORD FOUND!!!!: pw == asdf
 </code></pre>
-<p>It only took a few seconds to find the password, and the flag is in the text
-file: <code>CTF{CompressionIsNotEncryption}</code>.</p>
+<p>It only took a few seconds to find the password, and the flag is right there
+in <code>password.txt</code>: <code>CTF{CompressionIsNotEncryption}</code>.</p>
 <h2 id="floppy2">Floppy 2</h2>
-<p>Opening <code>www.com</code> file shows two lines of ASCII text. COM files are executable
-files for MS-DOS, so I installed DOSBox and ran the file, it printed out one
-line:</p>
+<p>Opening <code>www.com</code> file shows two lines of ASCII text, but nothing looks like a
+flag. COM files are executable files for MS-DOS, so I installed DOSBox and ran
+the file, it printed out one line:</p>
 <pre><code>The Foobanizer9000 is no longer on the OffHub DMZ.
 </code></pre>
-<p>Hum, no flag… What's in the memory? A memory dump can be easily created with
-Task Manager. After opening the dump file with Notepad++, it is not hard to
-find the flag with the search function: <code>CTF{g00do1dDOS-FTW}</code>.</p>
+<p>Hum, still no flag… What's in the memory? A memory dump can be easily created
+with Task Manager. After opening the dump file with Notepad++, it is not hard
+to find the flag with the search function: <code>CTF{g00do1dDOS-FTW}</code>.</p>
 <p>Note that I completed this quest on a Windows 10 device as I thought that would
 be easier, but it didn't really matter at the end.</p>
 <h2 id="thatsitfornow">That's It for Now</h2>

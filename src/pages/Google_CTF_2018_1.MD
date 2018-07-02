@@ -89,14 +89,13 @@ And indeed, the flag is recovered.
 ## Security by Obscurity
 
 Like the Floppy quest, 7-Zip isn't fooled by the random file extensions. After
-opening a zillion layers of archive folder, a `password.txt` is revealed.
+opening a zillion layers of archive folder, a `password.txt` file is revealed.
 However, it is password protected.
 
 The password should be pretty weak. To crack it, the innermost archive needs
 to be extracted. This can be done easily by navigating to the upper directory
-and dragging `password.x` out.
-
-After a quick Google search, `fcrackzip` should be the utility to use:
+and dragging `password.x` out. And after a quick Google search, `fcrackzip`
+should be the utility to use:
 
 ```
 $ fcrackzip
@@ -123,22 +122,22 @@ $ fcrackzip --brute-force --charset aA1 --length 1-5 --use-unzip password.x
 PASSWORD FOUND!!!!: pw == asdf
 ```
 
-It only took a few seconds to find the password, and the flag is in the text
-file: `CTF{CompressionIsNotEncryption}`.
+It only took a few seconds to find the password, and the flag is right there
+in `password.txt`: `CTF{CompressionIsNotEncryption}`.
 
 ## Floppy 2
 
-Opening `www.com` file shows two lines of ASCII text. COM files are executable
-files for MS-DOS, so I installed DOSBox and ran the file, it printed out one
-line:
+Opening `www.com` file shows two lines of ASCII text, but nothing looks like a
+flag. COM files are executable files for MS-DOS, so I installed DOSBox and ran
+the file, it printed out one line:
 
 ```
 The Foobanizer9000 is no longer on the OffHub DMZ.
 ```
 
-Hum, no flag... What's in the memory? A memory dump can be easily created with
-Task Manager. After opening the dump file with Notepad++, it is not hard to
-find the flag with the search function: `CTF{g00do1dDOS-FTW}`.
+Hum, still no flag... What's in the memory? A memory dump can be easily created
+with Task Manager. After opening the dump file with Notepad++, it is not hard
+to find the flag with the search function: `CTF{g00do1dDOS-FTW}`.
 
 Note that I completed this quest on a Windows 10 device as I thought that would
 be easier, but it didn't really matter at the end.
