@@ -187,14 +187,14 @@ in runtime:
 ```
 
 Scrolling over the result, the string `sha-256` and `Uint8Array` of length 32
-should be big red flags. The array can be easily encoded to hexadecimal, save
-it as a temporary global variable, then run:
+should be big red flags. The array can be easily encoded to hexadecimal, simply
+save it as a temporary global variable then run:
 
 ```JavaScript
 var temp2 = ""; temp1.forEach(x => { temp2 += x.toString(16).padStart(2, "0"); }); temp2
 ```
 
-After searching the result in Google, it is the SHA-256 hash of the input.
+After searching the result in Google, it is just the SHA-256 hash of the input.
 Observing the call log closely, it's easy to see that the code is looping over
 my SHA-256 array. It's time to add some code to trigger a breakpoint when `lhs`
 is `h`, the return value:
@@ -203,11 +203,11 @@ is `h`, the return value:
 if (lhs === "h") debugger;
 ```
 
-Each value in my SHA-256 array is XOR-ed by another value, then OR-ed into `h`,
-since the return value of function `x` would only be `true` if `h` is `0`, my
-SHA-256 array needs to match exactly their array. It's not hard to read out
-their array manually, but it's easier with some code, the final function looks
-like this:
+After the breakpoint hit, it's clear that each value in my SHA-256 array is
+XOR-ed by another value, then OR-ed into `h`, since the return value of
+function `x` would only be `true` if `h` is `0`, my SHA-256 array needs to
+match their array exactly. It's not hard to read out their array manually, but
+it's easier with some code, the final function looks like this:
 
 ```JavaScript
 async function x(password) {
@@ -319,8 +319,8 @@ if (document.domain === "router-ui.web.ctfcompetition.com") {
 }
 ```
 
-I don't have the file on my server, but the cookies should land in the server
-logs. It's time to send the email:
+I don't have the file on my server, but the cookies should still land in my
+server logs. It's time to send the email:
 
 ```
 TO: wintermuted@googlegroups.com
@@ -356,8 +356,8 @@ me to the log in page. There are two password fields on the page, opening
 Chromium's developer tools, it is easy to see both fields contains the value
 `CTF{Kao4pheitot7Ahmu}`.
 
-## Conclusion
+## That's Five
 
-Router-UI is my favorite quest so far, it's really well designed, it chains
+Router-UI is my favorite quest so far, it's really well designed. It chains
 so many common web development mistakes together: CSRF, XSS, then password
-field. I hope you learnt something, stay tuned for next quests!
+field. I hope you learnt something, and stay tuned for the next quests!
