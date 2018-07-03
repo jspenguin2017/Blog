@@ -361,3 +361,6 @@ Chromium's developer tools, it is easy to see both fields contains the value
 Router-UI is my favorite quest so far, it's really well designed. It chains
 so many common web development mistakes together: CSRF, XSS, then password
 field. I hope you learnt something, and stay tuned for the next quests!
+
+Also, from the user agent string, Wintermuted is using Headless Chrome,
+probably [Puppeteer](https://github.com/GoogleChrome/puppeteer).
