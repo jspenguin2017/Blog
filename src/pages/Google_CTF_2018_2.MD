@@ -268,5 +268,7 @@ Wintermuted to use Firefox.
 I tried splitting `<script>` tag to both field, but Chrome somehow still caught
 that. I also tried `onerror` of `<img>` tag, nothing. After observing the
 server response closely, `//` is added in between `username` and `password`,
-and Chrome woudln't catch it if it is used as part of URL.
+and Chrome woudln't catch it if it is used as part of `src` of a `<script>`
+tag.
+
 

