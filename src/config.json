@@ -4,7 +4,7 @@
     {
       "date": "2018.07.02",
       "id": 2,
-      "published": false,
+      "published": true,
       "src": "Google_CTF_2018_2",
       "summary": "Five more beginner's quests walkthrough!",
       "title": "Time For Moar Google CTF 2018"

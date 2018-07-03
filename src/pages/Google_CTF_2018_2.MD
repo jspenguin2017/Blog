@@ -123,6 +123,13 @@ Oh, it works!
 CTF{I_luv_buggy_sOFtware}
 ```
 
+## Firmware
+
+I think this challenge is not suppose to be this easy, but 7-Zip is just too
+powerful. After opening the archive a few layers, a file system like structure
+is shown, and a file named `.mediapc_backdoor_password.gz` is revealed. A plain
+text file is inside: `CTF{I_kn0W_tH15_Fs}`.
+
 ## JS Safe
 
 The ZIP file only contains an HTML file. Opening it reveals some HTML, CSS, and
@@ -268,11 +275,11 @@ Wintermuted to use Firefox.
 I tried splitting `<script>` tag to both field, but Chrome somehow still caught
 that. I also tried `onerror` of `<img>` tag, nothing. After observing the
 server response closely, `//` is added in between `username` and `password`,
-and Chrome woudln't catch it if it is used as part of `src` of a `<script>`
+and Chrome wouldn't catch it if it is used as part of `src` of a `<script>`
 tag.
 
 Since the log in page uses POST, I also need to create a page that submit a
-form using XSRF:
+form using a CSRF exploit:
 
 ```HTML
 <!DOCTYPE html>
@@ -331,3 +338,26 @@ Thanks for the
 link "https://blog.jspenguin.com/other/Google_CTF_2018_2/portal.html", I'll  
 check it out as soon as possible!
 ```
+
+Soon after, the cookie landed in my server log:
+
+```
+[...] /cat.png?ZmxhZz1UcnkgdGhlIHNlc3Npb24gY29va2llOyBzZXNzaW9uPUF2YWV2OHRoRGllTTZRdWF1b2gyVHVEZWFlejlXZWph [...]
+```
+
+Decoding it gives:
+
+```
+flag=Try the session cookie; session=Avaev8thDieM6Quauoh2TuDeaez9Weja
+```
+
+After setting the cookie, navigating to the home page will no longer redirect
+me to the log in page. There are two password fields on the page, opening
+Chromium's developer tools, it is easy to see both fields contains the value
+`CTF{Kao4pheitot7Ahmu}`.
+
+## Conclusion
+
+Router-UI is my favorite quest so far, it's really well designed, it chains
+so many common web development mistakes together: CSRF, XSS, then password
+field. I hope you learnt something, stay tuned for next quests!
