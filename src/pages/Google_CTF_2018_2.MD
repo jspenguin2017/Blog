@@ -319,7 +319,7 @@ if (document.domain === "router-ui.web.ctfcompetition.com") {
 }
 ```
 
-I don't have the file on my server, but the cookies should still land in my
+I don't have that file on my server, but the cookies should still land in my
 server logs. It's time to send the email:
 
 ```
@@ -351,7 +351,7 @@ Decoding it gives:
 flag=Try the session cookie; session=Avaev8thDieM6Quauoh2TuDeaez9Weja
 ```
 
-After setting the cookie, navigating to the home page will no longer redirect
+After setting the cookie, navigating to the home page no longer redirect
 me to the log in page. There are two password fields on the page, opening
 Chromium's developer tools, it is easy to see both fields contains the value
 `CTF{Kao4pheitot7Ahmu}`.
@@ -359,8 +359,9 @@ Chromium's developer tools, it is easy to see both fields contains the value
 ## That's Five
 
 Router-UI is my favorite quest so far, it's really well designed. It chains
-so many common web development mistakes together: CSRF, XSS, then password
-field. I hope you learnt something, and stay tuned for the next quests!
+so many common web development mistakes together: CSRF, XSS, session
+hijacking, then plain text inside password field. I hope you learnt something,
+and stay tuned for the next quests!
 
 Also, from the user agent string, Wintermuted is using Headless Chrome,
 probably [Puppeteer](https://github.com/GoogleChrome/puppeteer).
