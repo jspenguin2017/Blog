@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="jspenguin2017" />
+
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self';" />
+    <meta name="referrer" content="no-referrer" />
+    <title>(TODO) - Hugo Xu</title>
+
+    <link rel="stylesheet" href="common.css" />
+    <link rel="stylesheet" href="page.css" />
+</head>
+<body>
+    <div class="navbar">
+        <div class="left">
+            <a class="title">Hugo Xu</a>
+            <a class="item" href="index.html">Home</a>
+        </div>
+        <div class="clear"></div>
+    </div>
+
+    <div class="container"><h1 id="titletodo">(Title TODO)</h1>
+<p>(Intro TODO)</p>
+<h2 id="gatekeeper">Gatekeeper</h2>
+<p>Only a file named <code>gatekeeper</code> is insize the ZIP attachment, what is it?</p>
+<pre><code>$ file gatekeeper
+gatekeeper: ELF 64-bit LSB shared object, x86-64, [...], not stripped
+$ ./gatekeeper
+/===========================================================================\
+|               Gatekeeper - Access your PC from everywhere!                |
++===========================================================================+
+[ERROR] Login information missing
+Usage: ./gatekeeper &lt;username&gt; &lt;password&gt;
+</code></pre>
+<p>It's usually a good idea to see what strings are embedded in the binary:</p>
+<pre><code>$ strings gatekeeper
+[...]
+ ~&gt; Verifying.
+0n3_W4rM
+ ~&gt; Incorrect username
+zLl1ks_d4m_T0g_I
+Correct!
+[...]
+$ ./gatekeeper 0n3_W4rM zLl1ks_d4m_T0g_I
+/===========================================================================\
+|               Gatekeeper - Access your PC from everywhere!                |
++===========================================================================+
+ ~&gt; Verifying.......ACCESS DENIED
+ ~&gt; Incorrect password
+</code></pre>
+<p>Finding the fishy strings weren't too hard, but they don't work. After staring
+at the second string a few seconds, it reads <code>I got mad skills</code> backward. Is
+that it?</p>
+<pre><code>$ ./gatekeeper 0n3_W4rM I_g0T_m4d_sk1lLz
+/===========================================================================\
+|               Gatekeeper - Access your PC from everywhere!                |
++===========================================================================+
+ ~&gt; Verifying.......Correct!
+Welcome back!
+CTF{I_g0T_m4d_sk1lLz}
+</code></pre>
+<p>Yep, that's it.</p></div>
+
+    <div class="container footer">
+        <p>By Hugo Xu (@jspenguin2017)</p>
+    </div>
+</body>
+</html>

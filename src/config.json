@@ -2,6 +2,14 @@
   "csp": "default-src 'self';",
   "pages": [
     {
+      "date": "(TODO)",
+      "id": 3,
+      "published": false,
+      "src": "Google_CTF_2018_3",
+      "summary": "(TODO)",
+      "title": "(TODO)"
+    },
+    {
       "date": "2018.07.02",
       "id": 2,
       "published": true,
