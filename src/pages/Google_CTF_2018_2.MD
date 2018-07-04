@@ -23,8 +23,8 @@ SYNOPSIS
 [...]
 ```
 
-It is the `man` page for `socat`, over the pager `less`. Tying `q` would drop
-the connection. What about `h`? It opens the help text, but it is too hard to
+It's the `man` page for `socat`, over the pager `less`. Tying `q` would drop
+the connection. What about `h`? It opens the help text, but it's too hard to
 read over `netcat`. I opened a local copy of `less` and found:
 
 ```
@@ -52,7 +52,7 @@ Disabling DMZ using password CTF{SOmething-CATastr0phic}
 /home/moar/disable_dmz.sh: 18: /home/moar/disable_dmz.sh: cannot create /dev/dmz: Read-only file system
 ```
 
-And there is the flag.
+And there's the flag.
 
 ## Admin UI
 
@@ -125,7 +125,7 @@ CTF{I_luv_buggy_sOFtware}
 
 ## Firmware
 
-I think this challenge is not suppose to be this easy, but 7-Zip is just too
+I think this challenge isn't suppose to be this easy, but 7-Zip is just too
 powerful. After opening the archive a few layers, a file system like structure
 is shown, and a file named `.mediapc_backdoor_password.gz` is revealed. A plain
 text file is inside: `CTF{I_kn0W_tH15_Fs}`.
@@ -194,7 +194,7 @@ save it as a temporary global variable then run:
 var temp2 = ""; temp1.forEach(x => { temp2 += x.toString(16).padStart(2, "0"); }); temp2
 ```
 
-After searching the result in Google, it is just the SHA-256 hash of the input.
+After searching the result in Google, it's just the SHA-256 hash of the input.
 Observing the call log closely, it's easy to see that the code is looping over
 my SHA-256 array. It's time to add some code to trigger a breakpoint when `lhs`
 is `h`, the return value:
@@ -275,7 +275,7 @@ Wintermuted to use Firefox.
 I tried splitting `<script>` tag to both field, but Chrome somehow still caught
 that. I also tried `onerror` of `<img>` tag, nothing. After observing the
 server response closely, `//` is added in between `username` and `password`,
-and Chrome wouldn't catch it if it is used as part of `src` of a `<script>`
+and Chrome wouldn't catch it if it's used as part of `src` of a `<script>`
 tag.
 
 Since the log in page uses POST, I also need to create a page that submit a
@@ -353,7 +353,7 @@ flag=Try the session cookie; session=Avaev8thDieM6Quauoh2TuDeaez9Weja
 
 After setting the cookie, navigating to the home page no longer redirect
 me to the log in page. There are two password fields on the page, opening
-Chromium's developer tools, it is easy to see both fields contains the value
+Chromium's developer tools, it's easy to see both fields contains the value
 `CTF{Kao4pheitot7Ahmu}`.
 
 ## That's Five

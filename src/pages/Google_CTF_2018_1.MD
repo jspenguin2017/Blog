@@ -30,7 +30,7 @@ And there's the flag. What's in `www.com`? Well, that needs to wait for later.
 
 ## OCR is Cool
 
-This time, the ZIP attachment contains a PNG file, it is the screenshot of an
+This time, the ZIP attachment contains a PNG file, it's the screenshot of an
 email, but the text is all gibberish. The quest prompt says:
 
 ```
@@ -55,7 +55,7 @@ SYNOPSIS
 [...]
 ```
 
-Ah, caesar ciphers. It is a simple (and unsafe) encryption algorithm that
+Ah, caesar ciphers. It's a simple (and unsafe) encryption algorithm that
 rotates the alphabet. Since the flag should look like `CTF{...}`, it doesn't
 take long to spot a fishy string in the screenshot. The resolution of the image
 is not great, so let's OCR it manually:
@@ -89,7 +89,7 @@ And indeed, the flag is recovered.
 
 Like the Floppy quest, 7-Zip isn't fooled by the random file extensions. After
 opening a zillion layers of archive folders, a `password.txt` file is revealed.
-However, it is password protected.
+However, it's password protected.
 
 The password should be pretty weak. To crack it, the innermost archive needs
 to be extracted first. This can be done easily by navigating to the upper

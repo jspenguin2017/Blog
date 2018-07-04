@@ -43,7 +43,7 @@ In case of emergency, run www.com
 </code></pre>
 <p>And there's the flag. What's in <code>www.com</code>? Well, that needs to wait for later.</p>
 <h2 id="ocriscool">OCR is Cool</h2>
-<p>This time, the ZIP attachment contains a PNG file, it is the screenshot of an
+<p>This time, the ZIP attachment contains a PNG file, it's the screenshot of an
 email, but the text is all gibberish. The quest prompt says:</p>
 <pre><code>Caesar once said, don't stab me... [...]
 </code></pre>
@@ -62,7 +62,7 @@ SYNOPSIS
      caesar [rotation]
 [...]
 </code></pre>
-<p>Ah, caesar ciphers. It is a simple (and unsafe) encryption algorithm that
+<p>Ah, caesar ciphers. It's a simple (and unsafe) encryption algorithm that
 rotates the alphabet. Since the flag should look like <code>CTF{...}</code>, it doesn't
 take long to spot a fishy string in the screenshot. The resolution of the image
 is not great, so let's OCR it manually:</p>
@@ -85,7 +85,7 @@ CTF{caesarcipherisasubstitutioncipher}
 <h2 id="securitybyobscurity">Security by Obscurity</h2>
 <p>Like the Floppy quest, 7-Zip isn't fooled by the random file extensions. After
 opening a zillion layers of archive folders, a <code>password.txt</code> file is revealed.
-However, it is password protected.</p>
+However, it's password protected.</p>
 <p>The password should be pretty weak. To crack it, the innermost archive needs
 to be extracted first. This can be done easily by navigating to the upper
 directory and dragging <code>password.x</code> out. And after a quick Google search,

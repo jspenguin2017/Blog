@@ -40,8 +40,8 @@ SYNOPSIS
        procan
 [...]
 </code></pre>
-<p>It is the <code>man</code> page for <code>socat</code>, over the pager <code>less</code>. Tying <code>q</code> would drop
-the connection. What about <code>h</code>? It opens the help text, but it is too hard to
+<p>It's the <code>man</code> page for <code>socat</code>, over the pager <code>less</code>. Tying <code>q</code> would drop
+the connection. What about <code>h</code>? It opens the help text, but it's too hard to
 read over <code>netcat</code>. I opened a local copy of <code>less</code> and found:</p>
 <pre><code>[...]
   !command             Execute the shell command with $SHELL.
@@ -63,7 +63,7 @@ disable_dmz.sh
 Disabling DMZ using password CTF{SOmething-CATastr0phic}
 /home/moar/disable_dmz.sh: 18: /home/moar/disable_dmz.sh: cannot create /dev/dmz: Read-only file system
 </code></pre>
-<p>And there is the flag.</p>
+<p>And there's the flag.</p>
 <h2 id="adminui">Admin UI</h2>
 <p>Another remote exploitation quest:</p>
 <pre><code>$ nc mngmnt-iface.ctfcompetition.com 1337
@@ -121,7 +121,7 @@ sys:x:3:3:sys:/dev:/usr/sbin/nologin
 CTF{I_luv_buggy_sOFtware}
 </code></pre>
 <h2 id="firmware">Firmware</h2>
-<p>I think this challenge is not suppose to be this easy, but 7-Zip is just too
+<p>I think this challenge isn't suppose to be this easy, but 7-Zip is just too
 powerful. After opening the archive a few layers, a file system like structure
 is shown, and a file named <code>.mediapc_backdoor_password.gz</code> is revealed. A plain
 text file is inside: <code>CTF{I_kn0W_tH15_Fs}</code>.</p>
@@ -176,7 +176,7 @@ should be big red flags. The array can be easily encoded to hexadecimal, simply
 save it as a temporary global variable then run:</p>
 <pre><code class="JavaScript language-JavaScript">var temp2 = ""; temp1.forEach(x =&gt; { temp2 += x.toString(16).padStart(2, "0"); }); temp2
 </code></pre>
-<p>After searching the result in Google, it is just the SHA-256 hash of the input.
+<p>After searching the result in Google, it's just the SHA-256 hash of the input.
 Observing the call log closely, it's easy to see that the code is looping over
 my SHA-256 array. It's time to add some code to trigger a breakpoint when <code>lhs</code>
 is <code>h</code>, the return value:</p>
@@ -242,7 +242,7 @@ Wintermuted to use Firefox.</p>
 <p>I tried splitting <code>&lt;script&gt;</code> tag to both field, but Chrome somehow still caught
 that. I also tried <code>onerror</code> of <code>&lt;img&gt;</code> tag, nothing. After observing the
 server response closely, <code>//</code> is added in between <code>username</code> and <code>password</code>,
-and Chrome wouldn't catch it if it is used as part of <code>src</code> of a <code>&lt;script&gt;</code>
+and Chrome wouldn't catch it if it's used as part of <code>src</code> of a <code>&lt;script&gt;</code>
 tag.</p>
 <p>Since the log in page uses POST, I also need to create a page that submit a
 form using a CSRF exploit:</p>
@@ -301,7 +301,7 @@ check it out as soon as possible!
 </code></pre>
 <p>After setting the cookie, navigating to the home page no longer redirect
 me to the log in page. There are two password fields on the page, opening
-Chromium's developer tools, it is easy to see both fields contains the value
+Chromium's developer tools, it's easy to see both fields contains the value
 <code>CTF{Kao4pheitot7Ahmu}</code>.</p>
 <h2 id="thatsfive">That's Five</h2>
 <p>Router-UI is my favorite quest so far, it's really well designed. It chains
