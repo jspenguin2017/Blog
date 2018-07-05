@@ -54,7 +54,7 @@ Yep, that's it.
 
 ## Admin UI 2
 
-Now that I have the flag, it's time to log in:
+It's time to log in using the flag from [last time](Google_CTF_2018_2.html):
 
 ```
 [...]
@@ -142,7 +142,7 @@ function secondary_login() {
 }
 ```
 
-It's not valid C code, but the idea is easy to see the secondary password can
+It's not valid C code, but the idea is easy to see. The secondary password can
 be any string that is `0x23` or `35` characters long. I'll just use 35 `a`:
 
 ```
