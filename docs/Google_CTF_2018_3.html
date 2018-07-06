@@ -117,7 +117,7 @@ authentication, but the code still needs some cleaning:</p>
 
     char_array user_input = read_up_to_chars(127);
     for (int i = 0; i &lt; get_length(user_input); i++)
-        user_input[i] = user_input[i] &amp; 0xff ^ 0xffffffc7;
+        user_input[i] = user_input[i] ^ 0xc7;
 
     bool good;
     if (get_length(uer_input) == 0x23) {
@@ -146,8 +146,13 @@ be any string that is <code>0x23</code> or <code>35</code> characters long. I'll
 Please enter secret secondary password:
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 Authenticated
-&gt; 
-</code></pre></div>
+
+&gt; shell
+Security made us disable the shell, sorry!
+</code></pre>
+<p>Well, looks like I need to find another way. Looking back at the
+<code>secondary_login</code> function, the XOR and the <code>FLAG</code> variables are extra
+suspicious, what is the content of <code>FLAG</code>?</p></div>
 
     <div class="container footer">
         <p>By Hugo Xu (@jspenguin2017)</p>

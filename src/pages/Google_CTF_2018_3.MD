@@ -119,7 +119,7 @@ function secondary_login() {
 
     char_array user_input = read_up_to_chars(127);
     for (int i = 0; i < get_length(user_input); i++)
-        user_input[i] = user_input[i] & 0xff ^ 0xffffffc7;
+        user_input[i] = user_input[i] ^ 0xc7;
 
     bool good;
     if (get_length(uer_input) == 0x23) {
@@ -151,7 +151,13 @@ be any string that is `0x23` or `35` characters long. I'll just use 35 `a`:
 Please enter secret secondary password:
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 Authenticated
-> 
+
+> shell
+Security made us disable the shell, sorry!
 ```
+
+Well, looks like I need to find another way. Looking back at the
+`secondary_login` function, the XOR and the `FLAG` variables are extra
+suspicious, what is the content of `FLAG`?
 
 
