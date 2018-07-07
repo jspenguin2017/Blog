@@ -24,7 +24,7 @@
     <div class="container"><h1 id="titletodo">(Title TODO)</h1>
 <p>(Intro TODO)</p>
 <h2 id="gatekeeper">Gatekeeper</h2>
-<p>Only a file named <code>gatekeeper</code> is insize the ZIP attachment, what is it?</p>
+<p>Only a file named <code>gatekeeper</code> is insize the ZIP attachment, what's it?</p>
 <pre><code>$ file gatekeeper
 gatekeeper: ELF 64-bit LSB shared object, x86-64, [...], not stripped
 $ ./gatekeeper
@@ -72,12 +72,12 @@ CTF{I_luv_buggy_sOFtware}
 ! Two factor authentication required !
 Please enter secret secondary password:
 </code></pre>
-<p>Eh… Let's dump the binary and see if there's any clues in there:</p>
+<p>Eh… Let's dump the binary as per hints from the quest prompt:</p>
 <pre><code>$ echo -e "2\n../../../proc/self/exe\n3" | nc mngmnt-iface.ctfcompetition.com 1337 &gt; data.bin
 </code></pre>
 <p>This would include the menu text as well, I cleaned them with a text editor.
 Surprisingly that didn't corrupt the binary. Hopper Disassembler can generate
-C style pseudocode from binary, time to try it:</p>
+C style pseudocode from binary:</p>
 <pre><code>int _Z15secondary_loginv() {
     puts("! Two factor authentication required !");
     puts("Please enter secret secondary password:");
@@ -152,7 +152,7 @@ Security made us disable the shell, sorry!
 </code></pre>
 <p>Well, looks like I need to find another way. Looking back at the
 <code>secondary_login</code> function, the XOR and the <code>FLAG</code> variables are extra
-suspicious, what is the content of <code>FLAG</code>?</p>
+suspicious, what's the content of <code>FLAG</code>?</p>
 <pre><code class="JavaScript language-JavaScript">"use strict";
 
 const flag = [
@@ -181,15 +181,18 @@ const flag = [
 ];
 
 for (const w of flag) {
-    // Takes care of endianness
     let i = w.length;
-    while (i--) {
+    while (i--) { // Takes care of endianness
         process.stdout.write(String.fromCharCode(w[i] ^ 0xc7));
     }
 }
 </code></pre>
-<p>The content is not readable text, but it's clearly the flag after XOR-ing each
-byte with <code>0xc7</code>: <code>CTF{Two_PasSworDz_Better_th4n_1_k?}</code>.</p></div>
+<p>The content can be easily read out from Hopper Disassembler, but it's not
+readable text. However, it's clearly the flag after XOR-ing each byte with
+<code>0xc7</code>: <code>CTF{Two_PasSworDz_Better_th4n_1_k?}</code>.</p>
+<p>I'm not sure if it's a bug or intentional, but it would make more sense if the
+<code>secondary_login</code> function actually validated the input. <code>shell</code> is disabled,
+but can it be enabled with some hacking?</p></div>
 
     <div class="container footer">
         <p>By Hugo Xu (@jspenguin2017)</p>

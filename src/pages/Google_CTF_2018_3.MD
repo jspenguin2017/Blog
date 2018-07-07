@@ -4,7 +4,7 @@
 
 ## Gatekeeper
 
-Only a file named `gatekeeper` is insize the ZIP attachment, what is it?
+Only a file named `gatekeeper` is insize the ZIP attachment, what's it?
 
 ```
 $ file gatekeeper
@@ -66,7 +66,7 @@ CTF{I_luv_buggy_sOFtware}
 Please enter secret secondary password:
 ```
 
-Eh... Let's dump the binary and see if there's any clues in there:
+Eh... Let's dump the binary as per hints from the quest prompt:
 
 ```
 $ echo -e "2\n../../../proc/self/exe\n3" | nc mngmnt-iface.ctfcompetition.com 1337 > data.bin
@@ -74,7 +74,7 @@ $ echo -e "2\n../../../proc/self/exe\n3" | nc mngmnt-iface.ctfcompetition.com 13
 
 This would include the menu text as well, I cleaned them with a text editor.
 Surprisingly that didn't corrupt the binary. Hopper Disassembler can generate
-C style pseudocode from binary, time to try it:
+C style pseudocode from binary:
 
 ```
 int _Z15secondary_loginv() {
@@ -158,7 +158,7 @@ Security made us disable the shell, sorry!
 
 Well, looks like I need to find another way. Looking back at the
 `secondary_login` function, the XOR and the `FLAG` variables are extra
-suspicious, what is the content of `FLAG`?
+suspicious, what's the content of `FLAG`?
 
 ```JavaScript
 "use strict";
@@ -189,13 +189,17 @@ const flag = [
 ];
 
 for (const w of flag) {
-    // Takes care of endianness
     let i = w.length;
-    while (i--) {
+    while (i--) { // Takes care of endianness
         process.stdout.write(String.fromCharCode(w[i] ^ 0xc7));
     }
 }
 ```
 
-The content is not readable text, but it's clearly the flag after XOR-ing each
-byte with `0xc7`: `CTF{Two_PasSworDz_Better_th4n_1_k?}`.
+The content can be easily read out from Hopper Disassembler, but it's not
+readable text. However, it's clearly the flag after XOR-ing each byte with
+`0xc7`: `CTF{Two_PasSworDz_Better_th4n_1_k?}`.
+
+I'm not sure if it's a bug or intentional, but it would make more sense if the
+`secondary_login` function actually validated the input. `shell` is disabled,
+but can it be enabled with some hacking?
