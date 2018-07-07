@@ -2,12 +2,12 @@
   "csp": "default-src 'self';",
   "pages": [
     {
-      "date": "(TODO)",
+      "date": "2018.07.07",
       "id": 3,
-      "published": false,
+      "published": true,
       "src": "Google_CTF_2018_3",
-      "summary": "(TODO)",
-      "title": "(TODO)"
+      "summary": "Another five beginner's quests, I'm close to getting my cakes!",
+      "title": "Stack Smashing at Google CTF 2018"
     },
     {
       "date": "2018.07.02",

@@ -25,14 +25,14 @@ Alright, let's smash some stacks.
 ## Message of The Day
 
 After playing around a bit with the binary, I noticed that writting a large
-input when setting new user MOTD would cause `SIGSEGV`, which smells like
+input when setting new user MOTD would cause `SIGSEGV`, which smells like a
 buffer overflow vulnerability. 
 
 I then disassembled the binary with Hopper Disassembler like before, and found
-that the function that prints the current user MOTD will pass the string into
+that the function that prints the current user MOTD will pass my string into
 `printf` as first argument. Although this let me easily crash the program, my
-input isn't on the stack at this time, so exploiting this format string
-vulnerability to get the flag is rather difficult.
+input isn't on the stack when it's printed, so exploiting this format string
+vulnerability to get the flag would be rather difficult.
 
 It's time to investigate whether buffer overflow can be exploited, I checked
 the disassembly and found the instruction address right after reading user
@@ -263,6 +263,10 @@ the `quit` command is received. After entering `quit`, the program gets
 `SIGSEGV` (not `SIGABRT`). Looks like I can smash the stack and redirect code
 execution again.
 
+I also noticed that the `echo` command will pass my input to `printf` as first
+argument, but the buffer is only 48 bytes long, exploiting this format string
+vulnerability could be challenging.
+
 Examining the symbols, the `debug_shell` function is the one that handles
 the `shell` command (when it's enabled), following the same logic as Message
 of The Day quest:
@@ -426,9 +430,9 @@ worked. Examining the source code closely, I noticed the removed quotes in
 choice 1 is `"` but it's `'` in choices 2 ad 3. Choice 4 doesn't escape quotes,
 but the artist must be already in the database.
 
-After playing around with it a bit, I noticed I can have `'` in artist name,
-which is later not escaped in choice 4. It's time to craft a query that would
-print the flag:
+After playing around with it a bit, I noticed that I can have `'` in artist
+name, which is later not escaped in choice 4. It's time to craft a query that
+would print the flag:
 
 ```SQL
 SELECT artist, song FROM media WHERE artist = '' UNION SELECT 'flag', oauth_token FROM oauth_tokens
@@ -450,6 +454,7 @@ $ nc media-db.ctfcompetition.com 1337
 3) play song
 4) shuffle artist
 5) exit
+
 > 1
 artist name?
 ' UNION SELECT 'flag', oauth_token FROM oauth_tokens; --
@@ -465,6 +470,6 @@ choosing songs from random artist: ' UNION SELECT 'flag', oauth_token FROM oauth
 " by "flag"
 ```
 
-## I'm Close!
+## I'm Almost There!
 
-I'm almost done the beginner's quests! Hopefully I can see my cakes next time.
+I'm almost done the beginner's quests! Hopefully I can see my cakes soon.

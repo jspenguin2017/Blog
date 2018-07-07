@@ -7,7 +7,7 @@
 
     <meta http-equiv="Content-Security-Policy" content="default-src 'self';" />
     <meta name="referrer" content="no-referrer" />
-    <title>(TODO) - Hugo Xu</title>
+    <title>Stack Smashing at Google CTF 2018 - Hugo Xu</title>
 
     <link rel="stylesheet" href="common.css" />
     <link rel="stylesheet" href="page.css" />
@@ -42,13 +42,13 @@ your smart home?
 <p>Alright, let's smash some stacks.</p>
 <h2 id="messageoftheday">Message of The Day</h2>
 <p>After playing around a bit with the binary, I noticed that writting a large
-input when setting new user MOTD would cause <code>SIGSEGV</code>, which smells like
+input when setting new user MOTD would cause <code>SIGSEGV</code>, which smells like a
 buffer overflow vulnerability. </p>
 <p>I then disassembled the binary with Hopper Disassembler like before, and found
-that the function that prints the current user MOTD will pass the string into
+that the function that prints the current user MOTD will pass my string into
 <code>printf</code> as first argument. Although this let me easily crash the program, my
-input isn't on the stack at this time, so exploiting this format string
-vulnerability to get the flag is rather difficult.</p>
+input isn't on the stack when it's printed, so exploiting this format string
+vulnerability to get the flag would be rather difficult.</p>
 <p>It's time to investigate whether buffer overflow can be exploited, I checked
 the disassembly and found the instruction address right after reading user
 input is <code>0x60606173</code>:</p>
@@ -245,6 +245,9 @@ program right away, that's because the current function doesn't return until
 the <code>quit</code> command is received. After entering <code>quit</code>, the program gets
 <code>SIGSEGV</code> (not <code>SIGABRT</code>). Looks like I can smash the stack and redirect code
 execution again.</p>
+<p>I also noticed that the <code>echo</code> command will pass my input to <code>printf</code> as first
+argument, but the buffer is only 48 bytes long, exploiting this format string
+vulnerability could be challenging.</p>
 <p>Examining the symbols, the <code>debug_shell</code> function is the one that handles
 the <code>shell</code> command (when it's enabled), following the same logic as Message
 of The Day quest:</p>
@@ -381,9 +384,9 @@ mark the end of input. I tried a few classic SQL Injection payloads but nothing
 worked. Examining the source code closely, I noticed the removed quotes in
 choice 1 is <code>"</code> but it's <code>'</code> in choices 2 ad 3. Choice 4 doesn't escape quotes,
 but the artist must be already in the database.</p>
-<p>After playing around with it a bit, I noticed I can have <code>'</code> in artist name,
-which is later not escaped in choice 4. It's time to craft a query that would
-print the flag:</p>
+<p>After playing around with it a bit, I noticed that I can have <code>'</code> in artist
+name, which is later not escaped in choice 4. It's time to craft a query that
+would print the flag:</p>
 <pre><code class="SQL language-SQL">SELECT artist, song FROM media WHERE artist = '' UNION SELECT 'flag', oauth_token FROM oauth_tokens
 </code></pre>
 <p>Putting into classic SQL Injection format:</p>
@@ -397,6 +400,7 @@ print the flag:</p>
 3) play song
 4) shuffle artist
 5) exit
+
 &gt; 1
 artist name?
 ' UNION SELECT 'flag', oauth_token FROM oauth_tokens; --
@@ -411,8 +415,8 @@ choosing songs from random artist: ' UNION SELECT 'flag', oauth_token FROM oauth
 1: "CTF{fridge_cast_oauth_token_cahn4Quo}
 " by "flag"
 </code></pre>
-<h2 id="imclose">I'm Close!</h2>
-<p>I'm almost done the beginner's quests! Hopefully I can see my cakes next time.</p></div>
+<h2 id="imalmostthere">I'm Almost There!</h2>
+<p>I'm almost done the beginner's quests! Hopefully I can see my cakes soon.</p></div>
 
     <div class="container footer">
         <p>By Hugo Xu (@jspenguin2017)</p>
