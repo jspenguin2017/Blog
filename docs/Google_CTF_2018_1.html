@@ -30,7 +30,7 @@ so let's go!</p>
 contains a PDF file, opening it with Chromium browser shows a letter with
 username and password blacked out. However, the text can be selected. Selecting
 and pasting everything into an empty document reveals the password:
-<code>CTF{ICanReadDis}</code>. And that is the flag.</p>
+<code>CTF{ICanReadDis}</code>. And that's the flag.</p>
 <h2 id="floppy">Floppy</h2>
 <p>Like before, the attachment is a ZIP file, opening it with 7-Zip, it only
 contains one file: <code>foo.ico</code>. However, double-clicking on <code>foo.ico</code> would
@@ -87,7 +87,7 @@ CTF{caesarcipherisasubstitutioncipher}
 opening a zillion layers of archive folders, a <code>password.txt</code> file is revealed.
 However, it's password protected.</p>
 <p>The password should be pretty weak. To crack it, the innermost archive needs
-to be extracted first. This can be done easily by navigating to the upper
+to be first extracted. This can be done easily by navigating to the upper
 directory and dragging <code>password.x</code> out. And after a quick Google search,
 <code>fcrackzip</code> should be the utility to use:</p>
 <pre><code>$ fcrackzip
@@ -118,14 +118,14 @@ like a flag. COM files are executable files for MS-DOS, so I installed DOSBox
 and ran the file, it printed out one line:</p>
 <pre><code>The Foobanizer9000 is no longer on the OffHub DMZ.
 </code></pre>
-<p>Hum, still no flag… What's in the memory? A memory dump can be easily created
-with Task Manager. After opening the dump file with Notepad++, it's not hard
-to find the flag with the search function: <code>CTF{g00do1dDOS-FTW}</code>.</p>
+<p>Hum, still no flag… So what's in the memory? A memory dump can be easily
+created with Task Manager. After opening the dump file with Notepad++, it's not
+hard to find the flag with the search function: <code>CTF{g00do1dDOS-FTW}</code>.</p>
 <p>Note that I completed this quest on a Windows 10 device as I thought that would
 be easier, but it didn't really matter in the end.</p>
 <h2 id="thatsitfornow">That's It for Now</h2>
 <p>That's all for now. I will certainly look into other quests later. In the
-meantime, why don't you go try them out yourself?</p></div>
+meantime, why don't you go try out some quests for yourself?</p></div>
 
     <div class="container footer">
         <p>By Hugo Xu (@jspenguin2017)</p>

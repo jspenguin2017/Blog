@@ -160,4 +160,42 @@ Well, looks like I need to find another way. Looking back at the
 `secondary_login` function, the XOR and the `FLAG` variables are extra
 suspicious, what is the content of `FLAG`?
 
+```JavaScript
+"use strict";
 
+const flag = [
+    [
+        0x98, 0xa8, 0xb0, 0x93,
+        0xbc, 0x81, 0x93, 0x84,
+    ],
+    [
+        0x83, 0xb5, 0xa8, 0xb0,
+        0x94, 0xb4, 0xa6, 0x97,
+    ],
+    [
+        0xb5, 0xa2, 0xb3, 0xb3,
+        0xa2, 0x85, 0x98, 0xbd,
+    ],
+    [
+        0x98, 0xf6, 0x98, 0xa9,
+        0xf3, 0xaf, 0xb3, 0x98,
+    ],
+    [
+        0xf8, 0xac,
+    ],
+    [
+        0xba,
+    ],
+];
+
+for (const w of flag) {
+    // Takes care of endianness
+    let i = w.length;
+    while (i--) {
+        process.stdout.write(String.fromCharCode(w[i] ^ 0xc7));
+    }
+}
+```
+
+The content is not readable text, but it's clearly the flag after XOR-ing each
+byte with `0xc7`: `CTF{Two_PasSworDz_Better_th4n_1_k?}`.

@@ -23,7 +23,7 @@
 
     <div class="container"><h1 id="timeformoargooglectf2018">Time For Moar Google CTF 2018</h1>
 <p><a href="Google_CTF_2018_1.html">Last time</a>, I explored the first five beginner's
-quests of Google CTF 2018, and now, it's time for MOAR!</p>
+quests of Google CTF 2018, and now, it's time for more!</p>
 <h2 id="moar">Moar</h2>
 <p>The quest prompt gave a <code>netcat</code> server address, let's connect and see what's
 over on the other side:</p>
@@ -115,21 +115,23 @@ bin:x:2:2:bin:/bin:/usr/sbin/nologin
 sys:x:3:3:sys:/dev:/usr/sbin/nologin
 [...]
 </code></pre>
-<p>Oh, it works!</p>
+<p>Oh, it works! Note that <code>/etc/passwd</code> doesn't contain any password despite its
+name. Hashed passwords are stored in <code>/etc/shadow</code> which is only readable by
+<code>root</code>. Anyway, it's time to find the flag:</p>
 <pre><code>[...]
 ../flag
 CTF{I_luv_buggy_sOFtware}
 </code></pre>
 <h2 id="firmware">Firmware</h2>
 <p>I think this challenge isn't suppose to be this easy, but 7-Zip is just too
-powerful. After opening the archive a few layers, a file system like structure
+powerful. After opening the archive a few layers, a file system-like structure
 is shown, and a file named <code>.mediapc_backdoor_password.gz</code> is revealed. A plain
 text file is inside: <code>CTF{I_kn0W_tH15_Fs}</code>.</p>
 <h2 id="jssafe">JS Safe</h2>
 <p>The ZIP file only contains an HTML file. Opening it reveals some HTML, CSS, and
 two <code>&lt;script&gt;</code> tags. The second one seems to be just the basic functionality of
 the webpage, and the first one is the one to investigate. Also, it looks like
-the password to the safe is also the flag because the following regular
+the password to the safe is also the flag as per the following regular
 expression is in the second script tag:</p>
 <pre><code class="JavaScript language-JavaScript">  password = /^CTF{([0-9a-zA-Z_@!?-]+)}$/.exec(keyhole.value);
 </code></pre>
@@ -176,17 +178,17 @@ should be big red flags. The array can be easily encoded to hexadecimal, simply
 save it as a temporary global variable then run:</p>
 <pre><code class="JavaScript language-JavaScript">var temp2 = ""; temp1.forEach(x =&gt; { temp2 += x.toString(16).padStart(2, "0"); }); temp2
 </code></pre>
-<p>After searching the result in Google, it's just the SHA-256 hash of the input.
-Observing the call log closely, it's easy to see that the code is looping over
-my SHA-256 array. It's time to add some code to trigger a breakpoint when <code>lhs</code>
-is <code>h</code>, the return value:</p>
+<p>After searching the result in Google, it's just the SHA-256 hash of the input
+password. Observing the call log closely, it's easy to see that the code is
+looping over my SHA-256 array. It's time to add some code to trigger a
+breakpoint when <code>lhs</code> is <code>h</code>, the return value:</p>
 <pre><code class="JavaScript language-JavaScript">if (lhs === "h") debugger;
 </code></pre>
 <p>After the breakpoint hit, it's clear that each value in my SHA-256 array is
 XOR-ed by another value, then OR-ed into <code>h</code>, since the return value of
 function <code>x</code> would only be <code>true</code> if <code>h</code> is <code>0</code>, my SHA-256 array needs to
 match their array exactly. It's not hard to read out their array manually, but
-it's easier with some code, the final function looks like this:</p>
+it's easier with some code, my final function looks like this:</p>
 <pre><code class="JavaScript language-JavaScript">async function x(password) {
     // TODO: check if they can just use Google to get the password once they understand how this works.
     var code = '&lt;long string removed&gt;';
@@ -226,8 +228,8 @@ to the console:</p>
 </code></pre>
 <p>Putting it into Google, <code>Passw0rd!</code> comes out, so the flag is <code>CTF{Passw0rd!}</code>.</p>
 <h2 id="routerui">Router-UI</h2>
-<p>I personally find this to be pretty difficult for a beginner's quest. You also
-need a private server to complete this quest. The quest prompt reads:</p>
+<p>I personally find this one to be pretty difficult for a beginner's quest. You
+also need a private server to complete it. The quest prompt reads:</p>
 <pre><code>[...]
 If we could find an XSS on the page then we could use it to steal the root
 user session token. In case you find something, try to send an email to
@@ -245,7 +247,7 @@ server response closely, <code>//</code> is added in between <code>username</cod
 and Chrome wouldn't catch it if it's used as part of <code>src</code> of a <code>&lt;script&gt;</code>
 tag.</p>
 <p>Since the log in page uses POST, I also need to create a page that submit a
-form using a CSRF exploit:</p>
+form using a (separate) CSRF exploit:</p>
 <pre><code class="HTML language-HTML">&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;
@@ -266,7 +268,7 @@ form using a CSRF exploit:</p>
 &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
-<p>The exploit script:</p>
+<p>The XSS exploit script:</p>
 <pre><code class="JavaScript language-JavaScript">/**
  * Exploit script for Google CTF 2018.
  */
@@ -282,6 +284,7 @@ if (document.domain === "router-ui.web.ctfcompetition.com") {
 <p>I don't have that file on my server, but the cookies should still land in my
 server logs. It's time to send the email:</p>
 <pre><code>TO: wintermuted@googlegroups.com
+
 Cat Pictures
 
 I want to steal your session cookies, no, I mean I have cat pictures here: https://blog.jspenguin.com/other/Google_CTF_2018_2/portal.html
@@ -301,7 +304,7 @@ check it out as soon as possible!
 </code></pre>
 <p>After setting the cookie, navigating to the home page no longer redirect
 me to the log in page. There are two password fields on the page, opening
-Chromium's developer tools, it's easy to see both fields contains the value
+Chromium's developer tools, both fields contain the value
 <code>CTF{Kao4pheitot7Ahmu}</code>.</p>
 <h2 id="thatsfive">That's Five</h2>
 <p>Router-UI is my favorite quest so far, it's really well designed. It chains

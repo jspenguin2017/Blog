@@ -10,7 +10,7 @@ This is the first beginner's quest and is extremely easy. The attached ZIP file
 contains a PDF file, opening it with Chromium browser shows a letter with
 username and password blacked out. However, the text can be selected. Selecting
 and pasting everything into an empty document reveals the password:
-`CTF{ICanReadDis}`. And that is the flag.
+`CTF{ICanReadDis}`. And that's the flag.
 
 ## Floppy
 
@@ -92,7 +92,7 @@ opening a zillion layers of archive folders, a `password.txt` file is revealed.
 However, it's password protected.
 
 The password should be pretty weak. To crack it, the innermost archive needs
-to be extracted first. This can be done easily by navigating to the upper
+to be first extracted. This can be done easily by navigating to the upper
 directory and dragging `password.x` out. And after a quick Google search,
 `fcrackzip` should be the utility to use:
 
@@ -134,9 +134,9 @@ and ran the file, it printed out one line:
 The Foobanizer9000 is no longer on the OffHub DMZ.
 ```
 
-Hum, still no flag... What's in the memory? A memory dump can be easily created
-with Task Manager. After opening the dump file with Notepad++, it's not hard
-to find the flag with the search function: `CTF{g00do1dDOS-FTW}`.
+Hum, still no flag... So what's in the memory? A memory dump can be easily
+created with Task Manager. After opening the dump file with Notepad++, it's not
+hard to find the flag with the search function: `CTF{g00do1dDOS-FTW}`.
 
 Note that I completed this quest on a Windows 10 device as I thought that would
 be easier, but it didn't really matter in the end.
@@ -144,4 +144,4 @@ be easier, but it didn't really matter in the end.
 ## That's It for Now
 
 That's all for now. I will certainly look into other quests later. In the
-meantime, why don't you go try them out yourself?
+meantime, why don't you go try out some quests for yourself?

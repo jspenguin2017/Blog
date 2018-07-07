@@ -1,7 +1,7 @@
 # Time For Moar Google CTF 2018
 
 [Last time](Google_CTF_2018_1.html), I explored the first five beginner's
-quests of Google CTF 2018, and now, it's time for MOAR!
+quests of Google CTF 2018, and now, it's time for more!
 
 ## Moar
 
@@ -115,7 +115,9 @@ sys:x:3:3:sys:/dev:/usr/sbin/nologin
 [...]
 ```
 
-Oh, it works!
+Oh, it works! Note that `/etc/passwd` doesn't contain any password despite its
+name. Hashed passwords are stored in `/etc/shadow` which is only readable by
+`root`. Anyway, it's time to find the flag:
 
 ```
 [...]
@@ -126,7 +128,7 @@ CTF{I_luv_buggy_sOFtware}
 ## Firmware
 
 I think this challenge isn't suppose to be this easy, but 7-Zip is just too
-powerful. After opening the archive a few layers, a file system like structure
+powerful. After opening the archive a few layers, a file system-like structure
 is shown, and a file named `.mediapc_backdoor_password.gz` is revealed. A plain
 text file is inside: `CTF{I_kn0W_tH15_Fs}`.
 
@@ -135,7 +137,7 @@ text file is inside: `CTF{I_kn0W_tH15_Fs}`.
 The ZIP file only contains an HTML file. Opening it reveals some HTML, CSS, and
 two `<script>` tags. The second one seems to be just the basic functionality of
 the webpage, and the first one is the one to investigate. Also, it looks like
-the password to the safe is also the flag because the following regular
+the password to the safe is also the flag as per the following regular
 expression is in the second script tag:
 
 ```JavaScript
@@ -194,10 +196,10 @@ save it as a temporary global variable then run:
 var temp2 = ""; temp1.forEach(x => { temp2 += x.toString(16).padStart(2, "0"); }); temp2
 ```
 
-After searching the result in Google, it's just the SHA-256 hash of the input.
-Observing the call log closely, it's easy to see that the code is looping over
-my SHA-256 array. It's time to add some code to trigger a breakpoint when `lhs`
-is `h`, the return value:
+After searching the result in Google, it's just the SHA-256 hash of the input
+password. Observing the call log closely, it's easy to see that the code is
+looping over my SHA-256 array. It's time to add some code to trigger a
+breakpoint when `lhs` is `h`, the return value:
 
 ```JavaScript
 if (lhs === "h") debugger;
@@ -207,7 +209,7 @@ After the breakpoint hit, it's clear that each value in my SHA-256 array is
 XOR-ed by another value, then OR-ed into `h`, since the return value of
 function `x` would only be `true` if `h` is `0`, my SHA-256 array needs to
 match their array exactly. It's not hard to read out their array manually, but
-it's easier with some code, the final function looks like this:
+it's easier with some code, my final function looks like this:
 
 ```JavaScript
 async function x(password) {
@@ -255,8 +257,8 @@ Putting it into Google, `Passw0rd!` comes out, so the flag is `CTF{Passw0rd!}`.
 
 ## Router-UI
 
-I personally find this to be pretty difficult for a beginner's quest. You also
-need a private server to complete this quest. The quest prompt reads:
+I personally find this one to be pretty difficult for a beginner's quest. You
+also need a private server to complete it. The quest prompt reads:
 
 ```
 [...]
@@ -279,7 +281,7 @@ and Chrome wouldn't catch it if it's used as part of `src` of a `<script>`
 tag.
 
 Since the log in page uses POST, I also need to create a page that submit a
-form using a CSRF exploit:
+form using a (separate) CSRF exploit:
 
 ```HTML
 <!DOCTYPE html>
@@ -303,7 +305,7 @@ form using a CSRF exploit:
 </html>
 ```
 
-The exploit script:
+The XSS exploit script:
 
 ```JavaScript
 /**
@@ -324,6 +326,7 @@ server logs. It's time to send the email:
 
 ```
 TO: wintermuted@googlegroups.com
+
 Cat Pictures
 
 I want to steal your session cookies, no, I mean I have cat pictures here: https://blog.jspenguin.com/other/Google_CTF_2018_2/portal.html
@@ -353,7 +356,7 @@ flag=Try the session cookie; session=Avaev8thDieM6Quauoh2TuDeaez9Weja
 
 After setting the cookie, navigating to the home page no longer redirect
 me to the log in page. There are two password fields on the page, opening
-Chromium's developer tools, it's easy to see both fields contains the value
+Chromium's developer tools, both fields contain the value
 `CTF{Kao4pheitot7Ahmu}`.
 
 ## That's Five
