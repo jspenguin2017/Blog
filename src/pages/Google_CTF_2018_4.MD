@@ -144,3 +144,8 @@ user: CountZero
 ```
 
 And there is the flag. Check `/home/user/holey_beep`? What does that mean?
+
+## Holey Beep
+
+Holey Beep or [CVE-2018-0492](https://nvd.nist.gov/vuln/detail/CVE-2018-0492)
+is a privilege escalation vulnerability in the `beep` utility.
