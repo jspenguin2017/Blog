@@ -104,10 +104,10 @@ module.exports = class {
         });
     }
     /**
-     * Read until a pattern is found. Discards everything until end of
-     * pattern.
+     * Read until a pattern is found, including the pattern
      * @async @method
      * @param {Buffer|string} pattern - The pattern
+     * @return {Buffer} The bytes read.
      */
     read_until(pattern) {
         return new Promise((resolve, reject) => {
@@ -123,14 +123,46 @@ module.exports = class {
                         const to_cut = i + pattern.length;
 
                         if (this._buff.length === to_cut) {
+                            resolve(this._buff);
                             this._buff = null;
                         } else {
+                            resolve(this._buff.slice(0, to_cut));
                             this._buff = this._buff.slice(to_cut);
                         }
 
-                        resolve();
                         this._on_data = null;
                     }
+
+                }
+            };
+            check_buffer();
+        });
+    }
+    /**
+     * Read a line.
+     * @async @method
+     * @param {string} [encoding=utf8] - The encoding.
+     * @return {Buffer} The bytes read.
+     */
+    async read_line(encoding = "utf8") {
+        const res = await this.read_until("\n");
+        return res.toString(encoding);
+    }
+    /**
+     * Read everything, but at least one byte.
+     * @async @method
+     * @return {Buffer} The bytes read.
+     */
+    read_all() {
+        return new Promise((resolve, reject) => {
+            const check_buffer = () => {
+                if (this._buff === null) {
+                    this._on_data = check_buffer;
+
+                } else {
+                    resolve(this._buff);
+                    this._buff = null;
+                    this._on_data = null;
 
                 }
             };

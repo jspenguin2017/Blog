@@ -1,2 +1,3 @@
-# Ignore temporary exploit scripts
+# Ignore temporary exploit and test scripts
+test*.js
 exploit*.js
