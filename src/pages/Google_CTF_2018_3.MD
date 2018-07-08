@@ -424,11 +424,11 @@ c.execute("INSERT INTO oauth_tokens VALUES ('{}')".format(flag))
 # [...]
 ```
 
-It's clearly SQL Injection vulnerability, but quotes are removed and `\n` would
-mark the end of input. I tried a few classic SQL Injection payloads but nothing
-worked. Examining the source code closely, I noticed the removed quotes in
-choice 1 is `"` but it's `'` in choices 2 ad 3. Choice 4 doesn't escape quotes,
-but the artist must be already in the database.
+It's clearly going to be a SQL Injection vulnerability, but quotes are removed
+and `\n` would mark the end of input. I tried a few classic SQL Injection
+payloads but nothing worked. Examining the source code closely, I noticed the
+removed quotes in choice 1 is `"` but it's `'` in choices 2 ad 3. Choice 4
+doesn't escape quotes, but the artist must be already in the database.
 
 After playing around with it a bit, I noticed that I can have `'` in artist
 name, which is later not escaped in choice 4. It's time to craft a query that
