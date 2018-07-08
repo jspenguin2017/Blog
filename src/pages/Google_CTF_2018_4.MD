@@ -5,7 +5,7 @@
 ## Fridge TODO List
 
 The source code of the vulnerable program is included in the attachment.
-Reading over it, it's not hard to see what's vulnerable, but how to exploit it
+Reading over it, it's not hard to see what's broken, but how to exploit it
 is another question:
 
 ```C
@@ -43,28 +43,28 @@ If I enter a negative number, I can read and write data out of bound. However,
 that I can access:
 
 ```
--6  The "write" function in the GOT
--5  The "strncat" function in the GOT
--4  The "open" function in the Global Offset Table (GOT)
+-6  The "write" function in the Global Offset Table
+-5  The "strncat" function in the Global Offset Table
+-4  The "open" function in the Global Offset Table
 -3  Some random place
 -2  Start of "username" buffer
--1  Middle of "username" buffer
+-1  Somewhere in the middle of "username" buffer
 ```
 
-The `system` function in between `write` and `strncat` would allow me to
-execute any shell command, so my goal should be to overwrite the GOT and make
-some other function point to `system`. Since `atoi` is used to parse my menu
-choice input, it would be easy to exploit if I can make `atoi` point to
-`system`. But there is another problem, modern operating systems have ASLR,
-and a static payload would not work.
+The `system` function that's in between `write` and `strncat` would allow me to
+execute any shell command, so my goal should be to overwrite the Global Offset
+Table (GOT) and make some other function point to `system`. Since `atoi` is
+used to parse my menu choice input, it would be easy to exploit if I can make
+`atoi` point to `system`. But there is another problem, modern operating
+systems have ASLR, and a static payload would not work.
 
 I spent some time creating a 
 [Node.js library](https://github.com/jspenguin2017/Blog/tree/master/tools/lib)
 that allow my scripts to react to different server response over `netcat`.
 Since I can't directly read the address of `system`, I have to calculate it
-based on something. `strncat` is already called before I can overwrite the GOT,
-but `write` is only called when the program is exiting, so the GOT entry should
-be still pointing to the Procedure Linkage Table (PLT). With Hopper
+based on something else. `strncat` is already called before I can leak the
+GOT, but `write` is only called when the program is exiting, so its GOT entry
+should be still pointing to the Procedure Linkage Table (PLT). With Hopper
 Disassembler, I determined that the `system` entry in PLT is `0x30` below
 `write`. Hopefully it'll work:
 
@@ -97,7 +97,8 @@ const conn = new nc("fridge-todo-list.ctfcompetition.com", 1337);
     data = data.slice(0, i);
     hex.add(data, 0x30);
 
-    // Overwrite "atoi" with "system", corrupting "open" on the way
+    // Overwrite "atoi" with "system", corrupting "open" on the way, I don't
+    // need "open" anymore, so it's OK
     await conn.read_until(">");
     conn.write_line("3");
 
@@ -149,3 +150,9 @@ And there is the flag. Check `/home/user/holey_beep`? What does that mean?
 
 Holey Beep or [CVE-2018-0492](https://nvd.nist.gov/vuln/detail/CVE-2018-0492)
 is a privilege escalation vulnerability in the `beep` utility.
+
+(TODO)
+
+## (Ending TODO)
+
+(Ending TODO)
