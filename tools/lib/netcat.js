@@ -1,15 +1,16 @@
 /**
- * Netcat utility for Node.js.
+ * Netcat utility.
  */
 "use strict";
 
 /**
  * Load modules.
+ * @const {Module}
  */
 const net = require("net");
 
 /**
- * Main class.
+ * Netcat class.
  * Note that clean up is not implemented, so the class cannot be disposed once
  * constructed.
  * @class
@@ -21,7 +22,7 @@ module.exports = class {
      * @param {string} addr - The address.
      * @param {integer} port - The port.
      * @param {bool} [intr=true] - Whether the user can write into the
-     *     connection at any time.
+     *     connection stream at any time.
      */
     constructor(addr, port, intr = true) {
         this._conn = net.connect(port, addr);
@@ -64,11 +65,11 @@ module.exports = class {
     }
 
     /**
-     * Write data.
+     * Write raw data.
      * @method
-     * @param {Buffer|string} buff - Data to write.
+     * @param {Buffer|string} buff - The data to write.
      * @param {bool} [echo=true] - Whether the data should be written to
-     *     stdout.
+     *     stdout as well.
      */
     write(buff, echo = true) {
         if (echo) {
@@ -80,7 +81,7 @@ module.exports = class {
     /**
      * Write a line.
      * @method
-     * @param {string} str - Line to write
+     * @param {string} str - The line to write.
      */
     write_line(str) {
         this.write(str + "\n");
@@ -89,7 +90,7 @@ module.exports = class {
     /**
      * Read a set number of bytes.
      * @async @method
-     * @param {integer} byte - The number of byte to read.
+     * @param {integer} byte - The number of bytes to read.
      * @return {Buffer} The bytes read.
      */
     read(byte) {
@@ -120,10 +121,10 @@ module.exports = class {
         });
     }
     /**
-     * Read until a pattern is found, including the pattern.
+     * Read until a pattern is found.
      * @async @method
-     * @param {Buffer|string} pattern - The pattern
-     * @return {Buffer} The bytes read.
+     * @param {Buffer|string} pattern - The pattern.
+     * @return {Buffer} The bytes read, including the pattern.
      */
     read_until(pattern) {
         return new Promise((resolve, reject) => {
@@ -158,14 +159,15 @@ module.exports = class {
      * Read a line.
      * @async @method
      * @param {string} [encoding=utf8] - The encoding.
-     * @return {Buffer} The bytes read.
+     * @return {string} The line read, including the new line character.
      */
     async read_line(encoding = "utf8") {
         const res = await this.read_until("\n");
         return res.toString(encoding);
     }
     /**
-     * Read everything, but at least one byte.
+     * Read everything from the buffer, but wait until at least one byte is
+     * present.
      * @async @method
      * @return {Buffer} The bytes read.
      */

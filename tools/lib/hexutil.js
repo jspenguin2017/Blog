@@ -4,7 +4,7 @@
 "use strict";
 
 /**
- * Dump a buffer as hexadecimal.
+ * Dump a buffer as hexadecimal string.
  * @function
  * @param {Buffer} buff - The buffer to dump.
  */
@@ -19,8 +19,8 @@ exports.dump = (buff) => {
  * Add value into a buffer array. Index 0 must be the least significant byte.
  * The calculation is done in place.
  * @function
- * @param {buffer} arr - The buffer array.
- * @param {buffer} val - The value to add.
+ * @param {Buffer} arr - The buffer array.
+ * @param {integer} val - The value to add.
  */
 exports.add = (arr, val) => {
     let carry = val;
