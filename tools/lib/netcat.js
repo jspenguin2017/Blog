@@ -10,16 +10,20 @@ const net = require("net");
 
 /**
  * Main class.
+ * Note that clean up is not implemented, so the class cannot be disposed once
+ * constructed.
  * @class
  */
 module.exports = class {
     /**
-     * Constructor.
+     * Constructor. Create a connection.
      * @constructor
      * @param {string} addr - The address.
      * @param {integer} port - The port.
+     * @param {bool} [intr=true] - Whether the user can write into the
+     *     connection at any time.
      */
-    constructor(addr, port) {
+    constructor(addr, port, intr = true) {
         this._conn = net.connect(port, addr);
 
         this._buff = null;
@@ -49,15 +53,27 @@ module.exports = class {
             console.log();
             console.error("WRN: Disconnected");
         });
+
+        if (intr) {
+            process.stdin.setEncoding("utf8");
+            process.stdin.resume();
+            process.stdin.on("data", (chunk) => {
+                this.write(chunk.replace(/\r\n/g, "\n"), false);
+            });
+        }
     }
 
     /**
      * Write data.
      * @method
      * @param {Buffer|string} buff - Data to write.
+     * @param {bool} [echo=true] - Whether the data should be written to
+     *     stdout.
      */
-    write(buff) {
-        process.stdout.write(buff);
+    write(buff, echo = true) {
+        if (echo) {
+            process.stdout.write(buff);
+        }
 
         this._conn.write(buff);
     }
@@ -104,7 +120,7 @@ module.exports = class {
         });
     }
     /**
-     * Read until a pattern is found, including the pattern
+     * Read until a pattern is found, including the pattern.
      * @async @method
      * @param {Buffer|string} pattern - The pattern
      * @return {Buffer} The bytes read.
