@@ -1,7 +1,7 @@
 # Stack Smashing at Google CTF 2018
 
 The beginner's quests start to get hard, as a CTF beginner myself, I start to
-have some hard time solving the quests. Hopefully I can still get the cake
+have some hard time solving the quests. Hopefully I can still find the cakes
 though.
 
 What cake? Oh, looks like I forgot to mention it, here's the main quest prompt:

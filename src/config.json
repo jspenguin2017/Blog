@@ -2,11 +2,19 @@
   "csp": "default-src 'self';",
   "pages": [
     {
+      "date": "(TODO)",
+      "id": 4,
+      "published": false,
+      "src": "Google_CTF_2018_4",
+      "summary": "(TODO)",
+      "title": "Finding Cakes at Google CTF 2018"
+    },
+    {
       "date": "2018.07.07",
       "id": 3,
       "published": true,
       "src": "Google_CTF_2018_3",
-      "summary": "Another five beginner's quests, I'm close to getting my cakes!",
+      "summary": "Another five beginner's quests, I'm close to finding my cakes!",
       "title": "Stack Smashing at Google CTF 2018"
     },
     {
