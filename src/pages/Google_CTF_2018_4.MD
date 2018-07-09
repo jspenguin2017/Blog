@@ -51,12 +51,13 @@ that I can access:
 -1  Somewhere in the middle of "username" buffer
 ```
 
-The `system` function that's in between `write` and `strncat` would allow me to
+The `system` function in between `write` and `strncat` would allow me to
 execute any shell command, so my goal should be to overwrite the Global Offset
 Table (GOT) and make some other function point to `system`. Since `atoi` is
 used to parse my menu choice input, it would be easy to exploit if I can make
 `atoi` point to `system`. But there is another problem, modern operating
-systems have ASLR, and a static payload would not work.
+systems have Address Space Layout Randomization (ASLR), and a static payload
+would not work.
 
 I spent some time creating a 
 [Node.js library](https://github.com/jspenguin2017/Blog/tree/master/tools/lib)
@@ -78,7 +79,7 @@ const hex = require("./lib/hexutil");
 const conn = new nc("fridge-todo-list.ctfcompetition.com", 1337);
 
 (async () => {
-    // Log in
+    // Log in as (fake) root
     await conn.read_until("user:");
     conn.write_line("root");
 
@@ -146,9 +147,12 @@ user: CountZero
 
 And there is the flag. Check `/home/user/holey_beep`? What does that mean?
 
+As for the URL in the flag, it links to a troll tweet saying signed integers
+are better than unsigned ones.
+
 ## Holey Beep
 
-Holey Beep or [CVE-2018-0492](https://nvd.nist.gov/vuln/detail/CVE-2018-0492)
+Holey Beep, or [CVE-2018-0492](https://nvd.nist.gov/vuln/detail/CVE-2018-0492),
 is a privilege escalation vulnerability in the `beep` utility.
 
 (TODO)
