@@ -101,7 +101,10 @@ Admin MOTD is: CTF{m07d_1s_r3t_2_r34d_fl4g}
 ```
 
 Usually smashing the stack like this would cause `SIGABRT`, but apparently the
-binary of this quest is compiled without stack cookies.
+binary of this quest is compiled without stack cookies. Another mitigation
+technique, Position Independent Executable (PIE), would also block naive buffer
+overflow attacks like this one, but luckily PIE is also disabled for this
+binary.
 
 ## Admin UI 2
 
@@ -194,7 +197,7 @@ function secondary_login() {
 ```
 
 It's not valid C code, but the idea is easy to see. The secondary password can
-be any string that is `0x23` or `35` characters long. I'll just use 35 `a`:
+be any string that is `0x23` or 35 characters long. I'll just use 35 `a`:
 
 ```
 [...]
@@ -260,12 +263,12 @@ After checking the disassembly, I found that the buffer holding the input
 command is 48 bytes long. Writting something very big will not crash the
 program right away, that's because the current function doesn't return until
 the `quit` command is received. After entering `quit`, the program gets
-`SIGSEGV` (not `SIGABRT`). Looks like I can smash the stack and redirect code
-execution again.
+`SIGSEGV` (not `SIGABRT`). No stack cookie! Let's hope it doesn't have PIE
+enabled neither.
 
-I also noticed that the `echo` command will pass my input to `printf` as first
-argument, but the buffer is only 48 bytes long, exploiting this format string
-vulnerability could be challenging.
+As a side note, I also noticed that the `echo` command will pass my input to
+`printf` as first argument, but the buffer is only 48 bytes long, exploiting
+this format string vulnerability could be challenging.
 
 Examining the symbols, the `debug_shell` function is the one that handles
 the `shell` command (when it's enabled), following the same logic as Message

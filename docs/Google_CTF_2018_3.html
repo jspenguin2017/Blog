@@ -107,7 +107,10 @@ New msg: New message of the day saved!
 Admin MOTD is: CTF{m07d_1s_r3t_2_r34d_fl4g}
 </code></pre>
 <p>Usually smashing the stack like this would cause <code>SIGABRT</code>, but apparently the
-binary of this quest is compiled without stack cookies.</p>
+binary of this quest is compiled without stack cookies. Another mitigation
+technique, Position Independent Executable (PIE), would also block naive buffer
+overflow attacks like this one, but luckily PIE is also disabled for this
+binary.</p>
 <h2 id="adminui2">Admin UI 2</h2>
 <p>It's time to log in using the flag from <a href="Google_CTF_2018_2.html">last time</a>:</p>
 <pre><code>[...]
@@ -186,7 +189,7 @@ authentication, but the code still needs some cleaning:</p>
 }
 </code></pre>
 <p>It's not valid C code, but the idea is easy to see. The secondary password can
-be any string that is <code>0x23</code> or <code>35</code> characters long. I'll just use 35 <code>a</code>:</p>
+be any string that is <code>0x23</code> or 35 characters long. I'll just use 35 <code>a</code>:</p>
 <pre><code>[...]
 ! Two factor authentication required !
 Please enter secret secondary password:
@@ -243,11 +246,11 @@ still disabled, can it be enabled with some hacks?</p>
 command is 48 bytes long. Writting something very big will not crash the
 program right away, that's because the current function doesn't return until
 the <code>quit</code> command is received. After entering <code>quit</code>, the program gets
-<code>SIGSEGV</code> (not <code>SIGABRT</code>). Looks like I can smash the stack and redirect code
-execution again.</p>
-<p>I also noticed that the <code>echo</code> command will pass my input to <code>printf</code> as first
-argument, but the buffer is only 48 bytes long, exploiting this format string
-vulnerability could be challenging.</p>
+<code>SIGSEGV</code> (not <code>SIGABRT</code>). No stack cookie! Let's hope it doesn't have PIE
+enabled neither.</p>
+<p>As a side note, I also noticed that the <code>echo</code> command will pass my input to
+<code>printf</code> as first argument, but the buffer is only 48 bytes long, exploiting
+this format string vulnerability could be challenging.</p>
 <p>Examining the symbols, the <code>debug_shell</code> function is the one that handles
 the <code>shell</code> command (when it's enabled), following the same logic as Message
 of The Day quest:</p>
