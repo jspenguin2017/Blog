@@ -13,6 +13,7 @@ const net = require("net");
  * Netcat class.
  * Note that clean up is not implemented, so the class cannot be disposed once
  * constructed.
+ * Also, up to one event can be awaited at any given time.
  * @class
  */
 module.exports = class {
@@ -84,12 +85,15 @@ module.exports = class {
      * @param {string} str - The line to write.
      */
     write_line(str) {
-        this.write(str + "\n");
+        if (!str.endsWith("\n")) {
+            str += "\n";
+        }
+        this.write(str);
     }
 
     /**
      * Read a set number of bytes.
-     * @async @method
+     * @event
      * @param {integer} byte - The number of bytes to read.
      * @return {Buffer} The bytes read.
      */
@@ -122,7 +126,7 @@ module.exports = class {
     }
     /**
      * Read until a pattern is found.
-     * @async @method
+     * @event
      * @param {Buffer|string} pattern - The pattern.
      * @return {Buffer} The bytes read, including the pattern.
      */
@@ -157,7 +161,7 @@ module.exports = class {
     }
     /**
      * Read a line.
-     * @async @method
+     * @event
      * @param {string} [encoding=utf8] - The encoding.
      * @return {string} The line read, including the new line character.
      */
@@ -168,7 +172,7 @@ module.exports = class {
     /**
      * Read everything from the buffer, but wait until at least one byte is
      * present.
-     * @async @method
+     * @event
      * @return {Buffer} The bytes read.
      */
     read_all() {
