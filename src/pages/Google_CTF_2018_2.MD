@@ -72,7 +72,8 @@ abcd
 Incorrect, the authorities have been informed!
 ```
 
-Ops, that's not good. What's in the patch notes?
+Ops, that's not good. It's a good habit to always read patch notes, so let's do
+that.
 
 ```
 [...]
