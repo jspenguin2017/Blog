@@ -2,12 +2,12 @@
   "csp": "default-src 'self';",
   "pages": [
     {
-      "date": "(TODO)",
+      "date": "2018.09.01",
       "id": 4,
-      "published": false,
+      "published": true,
       "src": "Google_CTF_2018_4",
-      "summary": "(TODO)",
-      "title": "Finding Cakes at Google CTF 2018"
+      "summary": "But did I found cakes?",
+      "title": "Hacking Smart Fridge at Google CTF 2018"
     },
     {
       "date": "2018.07.07",

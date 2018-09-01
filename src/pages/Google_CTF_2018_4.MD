@@ -1,6 +1,10 @@
-# Finding Cakes at Google CTF 2018
+# Hacking Smart Fridge at Google CTF 2018
 
-(Intro TODO)
+It's unfortunate, but these SUID binary exploits are a bit too difficult. I
+managed to solve none of them. I will go study more about SUID binaries and
+hopefully I can get cakes next year.
+
+But hey, I did manage to hack into the smart fridge.
 
 ## Fridge TODO List
 
@@ -147,16 +151,14 @@ user: CountZero
 
 And there is the flag. Check `/home/user/holey_beep`? What does that mean?
 
-As for the URL in the flag, it links to a troll tweet saying signed integers
-are better than unsigned ones.
+As for the URL in the flag, it links to a (troll) tweet saying signed integers
+are more secure than unsigned ones.
 
-## Holey Beep
+## Holey... Beep?
 
 Holey Beep, or [CVE-2018-0492](https://nvd.nist.gov/vuln/detail/CVE-2018-0492),
-is a privilege escalation vulnerability in the `beep` utility.
+is a privilege escalation vulnerability in the `beep` utility. Although I
+managed to understand how Holey Beep works, I didn't manage to complete this
+quest...
 
-(TODO)
-
-## (Ending TODO)
-
-(Ending TODO)
+I will be back. I will.

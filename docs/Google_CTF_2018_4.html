@@ -7,7 +7,7 @@
 
     <meta http-equiv="Content-Security-Policy" content="default-src 'self';" />
     <meta name="referrer" content="no-referrer" />
-    <title>Finding Cakes at Google CTF 2018 - Hugo Xu</title>
+    <title>Hacking Smart Fridge at Google CTF 2018 - Hugo Xu</title>
 
     <link rel="stylesheet" href="common.css" />
     <link rel="stylesheet" href="page.css" />
@@ -21,8 +21,11 @@
         <div class="clear"></div>
     </div>
 
-    <div class="container"><h1 id="findingcakesatgooglectf2018">Finding Cakes at Google CTF 2018</h1>
-<p>(Intro TODO)</p>
+    <div class="container"><h1 id="hackingsmartfridgeatgooglectf2018">Hacking Smart Fridge at Google CTF 2018</h1>
+<p>It's unfortunate, but these SUID binary exploits are a bit too difficult. I
+managed to solve none of them. I will go study more about SUID binaries and
+hopefully I can get cakes next year.</p>
+<p>But hey, I did manage to hack into the smart fridge.</p>
 <h2 id="fridgetodolist">Fridge TODO List</h2>
 <p>The source code of the vulnerable program is included in the attachment.
 Reading over it, it's not hard to see what's broken, but how to exploit it
@@ -150,14 +153,14 @@ user: CountZero
 [...]
 </code></pre>
 <p>And there is the flag. Check <code>/home/user/holey_beep</code>? What does that mean?</p>
-<p>As for the URL in the flag, it links to a troll tweet saying signed integers
-are better than unsigned ones.</p>
-<h2 id="holeybeep">Holey Beep</h2>
+<p>As for the URL in the flag, it links to a (troll) tweet saying signed integers
+are more secure than unsigned ones.</p>
+<h2 id="holeybeep">Holey… Beep?</h2>
 <p>Holey Beep, or <a href="https://nvd.nist.gov/vuln/detail/CVE-2018-0492">CVE-2018-0492</a>,
-is a privilege escalation vulnerability in the <code>beep</code> utility.</p>
-<p>(TODO)</p>
-<h2 id="endingtodo">(Ending TODO)</h2>
-<p>(Ending TODO)</p></div>
+is a privilege escalation vulnerability in the <code>beep</code> utility. Although I
+managed to understand how Holey Beep works, I didn't manage to complete this
+quest…</p>
+<p>I will be back. I will.</p></div>
 
     <div class="container footer">
         <p>By Hugo Xu (@jspenguin2017)</p>
