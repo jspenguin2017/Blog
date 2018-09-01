@@ -86,10 +86,9 @@ CTF{caesarcipherisasubstitutioncipher}
 <p>Like the Floppy quest, 7-Zip isn't fooled by the random file extensions. After
 opening a zillion layers of archive folders, a <code>password.txt</code> file is revealed.
 However, it's password protected.</p>
-<p>The password should be pretty weak. To crack it, the innermost archive needs
-to be first extracted. This can be done easily by navigating to the upper
-directory and dragging <code>password.x</code> out. And after a quick Google search,
-<code>fcrackzip</code> should be the utility to use:</p>
+<p>The password should be pretty weak. To crack it, I first dragged <code>password.x</code>
+out into a directory; and after a quick Google search, <code>fcrackzip</code> should be
+the utility to use:</p>
 <pre><code>$ fcrackzip
 The program 'fcrackzip' is currently not installed. You can install it by typing:
 apt install fcrackzip

@@ -91,10 +91,9 @@ Like the Floppy quest, 7-Zip isn't fooled by the random file extensions. After
 opening a zillion layers of archive folders, a `password.txt` file is revealed.
 However, it's password protected.
 
-The password should be pretty weak. To crack it, the innermost archive needs
-to be first extracted. This can be done easily by navigating to the upper
-directory and dragging `password.x` out. And after a quick Google search,
-`fcrackzip` should be the utility to use:
+The password should be pretty weak. To crack it, I first dragged `password.x`
+out into a directory; and after a quick Google search, `fcrackzip` should be
+the utility to use:
 
 ```
 $ fcrackzip
