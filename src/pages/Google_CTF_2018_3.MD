@@ -28,11 +28,11 @@ After playing around a bit with the binary, I noticed that writting a large
 input when setting new user MOTD would cause `SIGSEGV`, which smells like a
 buffer overflow vulnerability. 
 
-I then disassembled the binary with Hopper Disassembler like before, and found
-that the function that prints the current user MOTD will pass my string into
-`printf` as first argument. Although this let me easily crash the program, my
-input isn't on the stack when it's printed, so exploiting this format string
-vulnerability to get the flag would be rather difficult.
+I then disassembled the binary with Hopper Disassembler, and found that the
+function that prints the current user MOTD will pass my string into `printf` as
+first argument. Although this let me easily crash the program, my input isn't
+on the stack when it's printed, so exploiting this format string vulnerability
+to get the flag would be rather difficult.
 
 It's time to investigate whether buffer overflow can be exploited, I checked
 the disassembly and found the instruction address right after reading user
@@ -120,7 +120,8 @@ CTF{I_luv_buggy_sOFtware}
 Please enter secret secondary password:
 ```
 
-Eh... Let's dump the binary as per hints from the quest prompt:
+Eh... It's more secure than expected. According to hints from the quest prompt,
+I should try to dump the binary:
 
 ```
 $ echo -e "2\n../../../proc/self/exe\n3" | nc mngmnt-iface.ctfcompetition.com 1337 > data.bin
@@ -128,7 +129,7 @@ $ echo -e "2\n../../../proc/self/exe\n3" | nc mngmnt-iface.ctfcompetition.com 13
 
 This would include the menu text as well, I cleaned them with a text editor.
 Surprisingly that didn't corrupt the binary. Hopper Disassembler can generate
-C style pseudocode from binary:
+C style pseudocode from binary, let's try it:
 
 ```
 int _Z15secondary_loginv() {
@@ -168,36 +169,40 @@ It didn't take long to find the function responsible for two factor
 authentication, but the code still needs some cleaning:
 
 ```
-function secondary_login() {
-    print(prompt_text);
+void secondary_login() {
+    puts(prompt_text);
 
-    char_array user_input = read_up_to_chars(127);
-    for (int i = 0; i < get_length(user_input); i++)
+    char * user_input = (char *)calloc(128, sizeof(char));
+    scanf("%127s", user_input);
+
+    for (size_t i = 0; i < strlen(user_input); i++)
         user_input[i] = user_input[i] ^ 0xc7;
 
     bool good;
-    if (get_length(uer_input) == 0x23) {
-        char_array flag = find_char_array(FLAG);
-        if (found_char_array(flag))
+    if (strlen(user_input) == 0x23) {
+        char * flag = FLAG;
+        if (flag != NULL)
             good = true;
         else
             good = false;
-    } else {
+    }
+    else {
         good = false;
     }
 
     if (good) {
-        print("Authenticated");
+        puts("Authenticated");
         command_line();
-    } else {
-        print("Access denied.");
-        exit_with_error(1);
+    }
+    else {
+        puts("Access denied.");
+        exit(1);
     }
 }
 ```
 
-It's not valid C code, but the idea is easy to see. The secondary password can
-be any string that is `0x23` or 35 characters long. I'll just use 35 `a`:
+The secondary password can be any string that is `0x23` or 35 characters long.
+I'll just use 35 `a`:
 
 ```
 [...]
