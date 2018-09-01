@@ -162,8 +162,10 @@ C style pseudocode from binary, let's try it:</p>
 </code></pre>
 <p>It didn't take long to find the function responsible for two factor
 authentication, but the code still needs some cleaning:</p>
-<pre><code>void secondary_login() {
-    puts(prompt_text);
+<pre><code>void secondary_login()
+{
+    puts("! Two factor authentication required !");
+    puts("Please enter secret secondary password:");
 
     char * user_input = (char *)calloc(128, sizeof(char));
     scanf("%127s", user_input);
@@ -172,22 +174,26 @@ authentication, but the code still needs some cleaning:</p>
         user_input[i] = user_input[i] ^ 0xc7;
 
     bool good;
-    if (strlen(user_input) == 0x23) {
+    if (strlen(user_input) == 0x23)
+    {
         char * flag = FLAG;
         if (flag != NULL)
             good = true;
         else
             good = false;
     }
-    else {
+    else
+    {
         good = false;
     }
 
-    if (good) {
+    if (good)
+    {
         puts("Authenticated");
         command_line();
     }
-    else {
+    else
+    {
         puts("Access denied.");
         exit(1);
     }
@@ -206,7 +212,7 @@ Security made us disable the shell, sorry!
 </code></pre>
 <p>Well, looks like I need to find another way. Looking back at the
 <code>secondary_login</code> function, the XOR and the <code>FLAG</code> variables are extra
-suspicious. The content of <code>FLAG</code> can be easily read out from disassembly:</p>
+suspicious. The content of <code>FLAG</code> can be read out from disassembly:</p>
 <pre><code class="JavaScript language-JavaScript">"use strict";
 
 const flag = [
@@ -235,17 +241,17 @@ const flag = [
 ];
 
 for (const w of flag) {
+    // Loop backward to handle endianness
     let i = w.length;
-    while (i--) { // Takes care of the endianness
+    while (i--)
         process.stdout.write(String.fromCharCode(w[i] ^ 0xc7));
-    }
 }
 </code></pre>
 <p>XOR-ing each byte of <code>FLAG</code> with <code>0xc7</code> reveals the flag:
 <code>CTF{Two_PasSworDz_Better_th4n_1_k?}</code>.</p>
 <p>I'm not sure if it's a bug or intentional, but it would make more sense if the
 <code>secondary_login</code> function actually validated the input. Anyway, <code>shell</code> is
-still disabled, can it be enabled with some hacks?</p>
+still disabled, let's hack it open!</p>
 <h2 id="adminui3">Admin UI 3</h2>
 <p>After checking the disassembly, I found that the buffer holding the input
 command is 48 bytes long. Writting something very big will not crash the
@@ -322,7 +328,7 @@ drwxr-xr-x 2 nobody nogroup   4096 Jun 18 08:25 patchnotes
 </code></pre>
 <p>And the third flag is <code>CTF{c0d3ExEc?W411_pL4y3d}</code>.</p>
 <h2 id="gatekeeper">Gatekeeper</h2>
-<p>Only a file named <code>gatekeeper</code> is insize the ZIP attachment, what's it?</p>
+<p>Only a file named <code>gatekeeper</code> is insize the ZIP attachment:</p>
 <pre><code>$ file gatekeeper
 gatekeeper: ELF 64-bit LSB shared object, x86-64, [...], not stripped
 $ ./gatekeeper
@@ -395,7 +401,7 @@ must be already in the database.</p>
 <p>After playing around with it a bit, I noticed that I can have <code>'</code> in artist
 name, which is later not escaped in choice 4. It's time to craft a query that
 would print the flag:</p>
-<pre><code class="SQL language-SQL">SELECT artist, song FROM media WHERE artist = '' UNION SELECT 'flag', oauth_token FROM oauth_tokens
+<pre><code class="SQL language-SQL">SELECT artist, song FROM media WHERE artist = '' UNION SELECT 'flag', oauth_token FROM oauth_tokens;
 </code></pre>
 <p>Putting into classic SQL Injection format:</p>
 <pre><code>' UNION SELECT 'flag', oauth_token FROM oauth_tokens; --

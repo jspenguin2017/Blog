@@ -169,8 +169,10 @@ It didn't take long to find the function responsible for two factor
 authentication, but the code still needs some cleaning:
 
 ```
-void secondary_login() {
-    puts(prompt_text);
+void secondary_login()
+{
+    puts("! Two factor authentication required !");
+    puts("Please enter secret secondary password:");
 
     char * user_input = (char *)calloc(128, sizeof(char));
     scanf("%127s", user_input);
@@ -179,22 +181,26 @@ void secondary_login() {
         user_input[i] = user_input[i] ^ 0xc7;
 
     bool good;
-    if (strlen(user_input) == 0x23) {
+    if (strlen(user_input) == 0x23)
+    {
         char * flag = FLAG;
         if (flag != NULL)
             good = true;
         else
             good = false;
     }
-    else {
+    else
+    {
         good = false;
     }
 
-    if (good) {
+    if (good)
+    {
         puts("Authenticated");
         command_line();
     }
-    else {
+    else
+    {
         puts("Access denied.");
         exit(1);
     }
@@ -217,7 +223,7 @@ Security made us disable the shell, sorry!
 
 Well, looks like I need to find another way. Looking back at the
 `secondary_login` function, the XOR and the `FLAG` variables are extra
-suspicious. The content of `FLAG` can be easily read out from disassembly:
+suspicious. The content of `FLAG` can be read out from disassembly:
 
 ```JavaScript
 "use strict";
@@ -248,10 +254,10 @@ const flag = [
 ];
 
 for (const w of flag) {
+    // Loop backward to handle endianness
     let i = w.length;
-    while (i--) { // Takes care of the endianness
+    while (i--)
         process.stdout.write(String.fromCharCode(w[i] ^ 0xc7));
-    }
 }
 ```
 
@@ -260,7 +266,7 @@ XOR-ing each byte of `FLAG` with `0xc7` reveals the flag:
 
 I'm not sure if it's a bug or intentional, but it would make more sense if the
 `secondary_login` function actually validated the input. Anyway, `shell` is
-still disabled, can it be enabled with some hacks?
+still disabled, let's hack it open!
 
 ## Admin UI 3
 
@@ -352,7 +358,7 @@ And the third flag is `CTF{c0d3ExEc?W411_pL4y3d}`.
 
 ## Gatekeeper
 
-Only a file named `gatekeeper` is insize the ZIP attachment, what's it?
+Only a file named `gatekeeper` is insize the ZIP attachment:
 
 ```
 $ file gatekeeper
@@ -443,7 +449,7 @@ name, which is later not escaped in choice 4. It's time to craft a query that
 would print the flag:
 
 ```SQL
-SELECT artist, song FROM media WHERE artist = '' UNION SELECT 'flag', oauth_token FROM oauth_tokens
+SELECT artist, song FROM media WHERE artist = '' UNION SELECT 'flag', oauth_token FROM oauth_tokens;
 ```
 
 Putting into classic SQL Injection format:
