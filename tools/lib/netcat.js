@@ -1,13 +1,38 @@
-/**
- * Netcat utility.
- */
+/******************************************************************************
+
+    Blog - My personal blog
+    Copyright (C) 2018  Hugo Xu
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+*******************************************************************************
+
+    Netcat utility
+
+******************************************************************************/
+
 "use strict";
 
+/*****************************************************************************/
+
 /**
- * Load modules.
+ * Modules.
  * @const {Module}
  */
 const net = require("net");
+
+/*****************************************************************************/
 
 /**
  * Netcat class.
@@ -17,6 +42,9 @@ const net = require("net");
  * @class
  */
 module.exports = class {
+
+    /*************************************************************************/
+
     /**
      * Constructor. Create a connection.
      * @constructor
@@ -65,6 +93,8 @@ module.exports = class {
         }
     }
 
+    /*************************************************************************/
+
     /**
      * Write raw data.
      * @method
@@ -79,6 +109,7 @@ module.exports = class {
 
         this._conn.write(buff);
     }
+
     /**
      * Write a line.
      * @method
@@ -90,6 +121,8 @@ module.exports = class {
         }
         this.write(str);
     }
+
+    /*************************************************************************/
 
     /**
      * Read a set number of bytes.
@@ -124,6 +157,7 @@ module.exports = class {
             check_buffer();
         });
     }
+
     /**
      * Read until a pattern is found.
      * @event
@@ -159,6 +193,7 @@ module.exports = class {
             check_buffer();
         });
     }
+
     /**
      * Read a line.
      * @event
@@ -169,6 +204,7 @@ module.exports = class {
         const res = await this.read_until("\n");
         return res.toString(encoding);
     }
+
     /**
      * Read everything from the buffer, but wait until at least one byte is
      * present.
@@ -191,4 +227,9 @@ module.exports = class {
             check_buffer();
         });
     }
+
+    /*************************************************************************/
+
 };
+
+/*****************************************************************************/

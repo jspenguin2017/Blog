@@ -1,8 +1,36 @@
-/**
- * Blog build script.
- */
+/******************************************************************************
+
+    Blog - My personal blog
+    Copyright (C) 2018  Hugo Xu
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+*******************************************************************************
+
+    Blog build script
+
+******************************************************************************/
+
 "use strict";
 
+/*****************************************************************************/
+
+process.on("unhandledRejection", (e) => {
+    throw e;
+});
+
+/*****************************************************************************/
 
 /**
  * Modules.
@@ -11,17 +39,20 @@
 const fs = require("fs-extra");
 const os = require("os");
 const showdown = require("showdown");
+
 /**
  * Showdown converter.
  * @const {Converter}
  */
 const converter = new showdown.Converter();
 
+/*****************************************************************************/
+
 /**
  * Generate content of the index file.
  * @function
  * @param {Object} config - The configuration object.
- * @return {string} The generated content
+ * @return {string} The generated content.
  */
 const index_content = (config) => {
     let result = "";
@@ -45,8 +76,10 @@ const index_content = (config) => {
     return result;
 };
 
+/*****************************************************************************/
+
 /**
- * Main function
+ * Main function.
  * @async @function
  */
 const main = async () => {
@@ -80,8 +113,6 @@ const main = async () => {
     }
 };
 
-
-process.on("unhandledRejection", (e) => {
-    throw e;
-});
 main();
+
+/*****************************************************************************/
