@@ -269,10 +269,7 @@ form using a (separate) CSRF exploit:</p>
 &lt;/html&gt;
 </code></pre>
 <p>The XSS exploit script:</p>
-<pre><code class="JavaScript language-JavaScript">/**
- * Exploit script for Google CTF 2018.
- */
-"use strict";
+<pre><code class="JavaScript language-JavaScript">"use strict";
 
 // Check domain to prevent misuse
 if (document.domain === "router-ui.web.ctfcompetition.com") {

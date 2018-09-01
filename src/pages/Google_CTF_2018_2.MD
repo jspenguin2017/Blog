@@ -308,9 +308,6 @@ form using a (separate) CSRF exploit:
 The XSS exploit script:
 
 ```JavaScript
-/**
- * Exploit script for Google CTF 2018.
- */
 "use strict";
 
 // Check domain to prevent misuse
