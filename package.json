@@ -11,7 +11,7 @@
   "engines": {
     "node": ">=10.5.0"
   },
-  "homepage": "https://blog.jspenguin.com/",
+  "homepage": "https://blog.hugoxu.com/",
   "license": "GPL-3.0",
   "name": "blog-build",
   "private": true,
