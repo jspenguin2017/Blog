@@ -2,4 +2,4 @@
 
 My personal blog
 
-### [Enter](https://blog.jspenguin.com/)
+### [Enter](https://blog.hugoxu.com/)
