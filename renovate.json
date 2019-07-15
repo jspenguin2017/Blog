@@ -1,5 +1,5 @@
 {
   "extends": [
-    "hugoxu-renovate-config"
+    "hugoxu-renovate-config:default"
   ]
 }
