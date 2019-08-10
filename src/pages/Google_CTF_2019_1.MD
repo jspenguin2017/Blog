@@ -7,9 +7,9 @@ And with it, comes new beginners quests. Let's get started!
 ## Enter Space-Time Coordinates
 
 The attachment contains two files: a text log file, and a binary. The log file
-doesn't contains the flag but the binary does. Knowing the flag should start
-with `CTF`, it's pretty easy to extract the flag from the binary using the
-`strings` command from `binutils` package:
+doesn't contains the flag but what about the binary? Knowing the flag should
+start with `CTF`, it's pretty easy to extract the flag from the binary using
+the `strings` command from `binutils` package:
 
 ```
 $ strings rand2 | grep CTF
