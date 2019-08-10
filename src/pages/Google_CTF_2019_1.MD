@@ -39,10 +39,10 @@ the Go programming language.
 
 I spent quite some time trying to decompile and debug the binary, with limited
 success. The only significant discovery I made is that the binary uses the
-`net` package, indicating it may connect to remote servers. Reading the PDF
-document again, I noticed that it mentions something about the security of
+`net` package, indicating that it may connect to remote servers. Reading the
+PDF document again, I noticed that it mentions something about the security of
 connection. I started Wireshark but the binary isn't making any connections.
-I then tried to look for a domain-like string using `strings` and `grep`, and I
+I then tried to look for a domain-like strings using `strings` and `grep`, and I
 found `satellite.ctfcompetition.com:1337`. Connecting with a browser didn't
 work, but `netcat` did:
 
@@ -55,11 +55,13 @@ Username: brewtoot password: CTF{4efcc72090af28fd33a2118985541f92e793477f}
 Remaining config data written to: https://docs.google.com/document/d/14eYPluD_pi3824GAFanS29tWdTcKxP_XUxx7e303-3E
 ```
 
-Clearly, the password is the flag.
-
-Opening the Google Doc and running its content through a base 64 decoder:
+Clearly, the password is the flag. Now opening the Google Doc and running its
+content through a base 64 decoder:
 
 ```
 Username: wireshark-rocks
 Password: start-sniffing!
 ```
+
+I tried to enter both usernames to the binary, but neither worked. There might
+be more secrets in this binary yet to be discovered.
