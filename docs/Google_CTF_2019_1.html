@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="jspenguin2017" />
+
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self';" />
+    <meta name="referrer" content="no-referrer" />
+    <title>First Look at Google CTF 2019 - Hugo Xu</title>
+
+    <link rel="stylesheet" href="common.css" />
+    <link rel="stylesheet" href="page.css" />
+</head>
+<body>
+    <div class="navbar">
+        <div class="left">
+            <a class="title">Hugo Xu</a>
+            <a class="item" href="index.html">Home</a>
+        </div>
+        <div class="clear"></div>
+    </div>
+
+    <div class="container"><h1 id="firstlookatgooglectf2019">First Look at Google CTF 2019</h1>
+<p>A new year, a
+<a href="https://security.googleblog.com/2019/05/google-ctf-2019-is-here.html">new Google CTF</a>.
+And with it, comes new beginners quests. Let's get started!</p>
+<h2 id="enterspacetimecoordinates">Enter Space-Time Coordinates</h2>
+<p>The attachment contains two files: a text log file, and a binary. The log file
+doesn't contains the flag but the binary does. Knowing the flag should start
+with <code>CTF</code>, it's pretty easy to extract the flag from the binary using the
+<code>strings</code> command from <code>binutils</code> package:</p>
+<pre><code>$ strings rand2 | grep CTF
+Arrived at the flag. Congrats, your flag is: CTF{welcome_to_googlectf}
+</code></pre></div>
+
+    <div class="container footer">
+        <p>By Hugo Xu (@jspenguin2017)</p>
+    </div>
+</body>
+</html>

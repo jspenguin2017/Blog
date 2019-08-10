@@ -2,6 +2,14 @@
   "csp": "default-src 'self';",
   "pages": [
     {
+      "data": "2019.08.10",
+      "id": 5,
+      "published": false,
+      "src": "Google_CTF_2019_1",
+      "summary": "Overview of Google CTF 2019 and walkthrough of the first five beginner's quests.",
+      "title": "First Look at Google CTF 2019"
+    },
+    {
       "date": "2018.09.01",
       "id": 4,
       "published": true,
