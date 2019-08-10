@@ -6,10 +6,10 @@ And with it, comes new beginners quests. Let's get started!
 
 ## Enter Space-Time Coordinates
 
-The attachment contains two files: a text log file, and a binary. The log file
-doesn't contains the flag but what about the binary? Knowing the flag should
+The attachment contains two files: a text log file and a binary. The log file
+doesn't contain the flag but what about the binary? Knowing that flags should
 start with `CTF`, it's pretty easy to extract the flag from the binary using
-the `strings` command from `binutils` package:
+the `strings` utility from `binutils` package:
 
 ```
 $ strings rand2 | grep CTF
@@ -31,11 +31,11 @@ The flag is `CTF{9e796ca74932912c216a1cd00c25c84fae00e139}`.
 Apparently the last quest is optional, in fact, it doesn't even show up on the
 map! Anyway, let's get back on track.
 
-The attachment for this quest is almost 6 MiB, it contains a PDF file and a
-binary, both around 3 MiB. Since the binary is so large, it is probably not
-written in native code. Examining the strings in the binary further confirms
-that theory, specifically, the binary is probably written in the Go programming
-language.
+The attachment for this quest is quite large, almost 6 MiB! It contains a PDF
+file and a binary, both are around 3 MiB. Since the binary is so large, it is
+probably not written in native code. Examining the strings in the binary
+further confirms that theory, specifically, the binary is probably written in
+the Go programming language.
 
 I spent quite some time trying to decompile and debug the binary, with limited
 success. The only significant discovery I made is that the binary uses the
@@ -43,7 +43,7 @@ success. The only significant discovery I made is that the binary uses the
 document again, I noticed that it mentions something about the security of
 connection. I started Wireshark but the binary isn't making any connections.
 I then tried to look for a domain-like string using `strings` and `grep`, and I
-found `satellite.ctfcompetition.com:1337`. Connecting with a browser did not
+found `satellite.ctfcompetition.com:1337`. Connecting with a browser didn't
 work, but `netcat` did:
 
 ```
@@ -54,6 +54,8 @@ Username: brewtoot password: CTF{4efcc72090af28fd33a2118985541f92e793477f}
 [...]
 Remaining config data written to: https://docs.google.com/document/d/14eYPluD_pi3824GAFanS29tWdTcKxP_XUxx7e303-3E
 ```
+
+Clearly, the password is the flag.
 
 Opening the Google Doc and running its content through a base 64 decoder:
 
