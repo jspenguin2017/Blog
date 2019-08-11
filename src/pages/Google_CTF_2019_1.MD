@@ -29,7 +29,7 @@ The flag is `CTF{9e796ca74932912c216a1cd00c25c84fae00e139}`.
 ## Satellite
 
 Apparently the last quest is optional, in fact, it doesn't even show up on the
-map! Anyway, let's get back on track.
+map... Anyway, let's get back on track.
 
 The attachment for this quest is quite large, almost 6 MiB! It contains a PDF
 file and a binary, both are around 3 MiB. Since the binary is so large, it is
@@ -41,10 +41,11 @@ I spent quite some time trying to decompile and debug the binary, with limited
 success. The only significant discovery I made is that the binary uses the
 `net` package, indicating that it may connect to remote servers. Reading the
 PDF document again, I noticed that it mentions something about the security of
-connection. I started Wireshark but the binary isn't making any connections.
-I then tried to look for a domain-like strings using `strings` and `grep`, and I
-found `satellite.ctfcompetition.com:1337`. Connecting with a browser didn't
-work, but `netcat` did:
+connection. I started Wireshark but I didn't manage to find anything
+interesting. I then tried to look for a domain-like strings using `strings` and
+`grep` as explained in the first quest, and I found
+`satellite.ctfcompetition.com:1337`. Connecting with a browser didn't work, but
+`netcat` did:
 
 ```
 $ netcat satellite.ctfcompetition.com 1337

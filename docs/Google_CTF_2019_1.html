@@ -42,7 +42,7 @@ and at around <code>0:17</code>, a flag is shown on the screen for one frame. No
 <p>The flag is <code>CTF{9e796ca74932912c216a1cd00c25c84fae00e139}</code>.</p>
 <h2 id="satellite">Satellite</h2>
 <p>Apparently the last quest is optional, in fact, it doesn't even show up on the
-map! Anyway, let's get back on track.</p>
+map… Anyway, let's get back on track.</p>
 <p>The attachment for this quest is quite large, almost 6 MiB! It contains a PDF
 file and a binary, both are around 3 MiB. Since the binary is so large, it is
 probably not written in native code. Examining the strings in the binary
@@ -52,10 +52,11 @@ the Go programming language.</p>
 success. The only significant discovery I made is that the binary uses the
 <code>net</code> package, indicating that it may connect to remote servers. Reading the
 PDF document again, I noticed that it mentions something about the security of
-connection. I started Wireshark but the binary isn't making any connections.
-I then tried to look for a domain-like strings using <code>strings</code> and <code>grep</code>, and I
-found <code>satellite.ctfcompetition.com:1337</code>. Connecting with a browser didn't
-work, but <code>netcat</code> did:</p>
+connection. I started Wireshark but I didn't manage to find anything
+interesting. I then tried to look for a domain-like strings using <code>strings</code> and
+<code>grep</code> as explained in the first quest, and I found
+<code>satellite.ctfcompetition.com:1337</code>. Connecting with a browser didn't work, but
+<code>netcat</code> did:</p>
 <pre><code>$ netcat satellite.ctfcompetition.com 1337
 Welcome. Enter (a) to display config data, (b) to erase all data or (c) to disconnect
 a
