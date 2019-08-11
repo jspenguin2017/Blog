@@ -65,3 +65,47 @@ Password: start-sniffing!
 
 I tried to enter both usernames to the binary, but neither worked. There might
 be more secrets in this binary yet to be discovered.
+
+## Home Computer
+
+The attachment is 25 MiB! Wow, is that a large package. Unpacking the ZIP file
+gives two files: a text file with some instructions specific for MacOS, and
+a `.ntfs` image. The image can be opened using 7-Zip, after navigating around
+the file system, a file named `credentials.txt` in the `Documents` directory
+caught my attention. It reads:
+
+```
+I keep pictures of my credentials in extended attributes.
+```
+
+After some research, it looks like `getfattr` utility of `attr` package is the
+right tool for the task:
+
+```
+$ mkdir family
+$ sudo mount family.ntfs family
+$ cd family
+$ getfattr --recursive .
+# file: Users/Family/Documents/credentials.txt
+user.FILE0
+```
+
+Now extract the extended attribute:
+
+```
+$ cd Users/Family/Documents
+$ getfattr --name=user.FILE0 --only-values credentials.txt > credentials.png
+```
+
+Open the file with an image viewer:
+
+```
+Logins for socialnetwork & govnetwork:
+CTF{congratsyoufoundmycreds}
+```
+
+And there is the flag. As a cleanup, the image can be unmounted with:
+
+```
+$ sudo umount family
+```
