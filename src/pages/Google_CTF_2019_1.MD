@@ -28,8 +28,8 @@ The flag is `CTF{9e796ca74932912c216a1cd00c25c84fae00e139}`.
 
 ## Satellite
 
-Apparently the last quest is optional, in fact, it doesn't even show up on the
-map... Anyway, let's get back on track.
+Apparently the previous quest is optional, in fact, it doesn't even show up on
+the map... Anyway, let's get back on track.
 
 The attachment for this quest is quite large, almost 6 MiB! It contains a PDF
 file and a binary, both are around 3 MiB. Since the binary is so large, it is
