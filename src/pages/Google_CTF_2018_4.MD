@@ -43,8 +43,8 @@ void print_todo() {
 ```
 
 If I enter a negative number, I can read and write data out of bound. However,
-`TODO_LENGTH` is `0x30`, with some math and a disassembler, I found places
-that I can access:
+`TODO_LENGTH` is `0x30`, so my access is somewhat restricted. With some math
+and a disassembler, I found places that I can access:
 
 ```
 -6  The "write" function in the Global Offset Table

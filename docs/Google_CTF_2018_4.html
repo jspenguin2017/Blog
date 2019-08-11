@@ -59,8 +59,8 @@ void print_todo() {
 // [...]
 </code></pre>
 <p>If I enter a negative number, I can read and write data out of bound. However,
-<code>TODO_LENGTH</code> is <code>0x30</code>, with some math and a disassembler, I found places
-that I can access:</p>
+<code>TODO_LENGTH</code> is <code>0x30</code>, so my access is somewhat restricted. With some math
+and a disassembler, I found places that I can access:</p>
 <pre><code>-6  The "write" function in the Global Offset Table
 -5  The "strncat" function in the Global Offset Table
 -4  The "open" function in the Global Offset Table

