@@ -69,11 +69,10 @@ be more secrets in this binary yet to be discovered.
 
 ## Home Computer
 
-The attachment is 25 MiB! Wow, is that a large package. Unpacking the ZIP file
-gives two files: a text file with some instructions specific for MacOS, and
-a `.ntfs` image. The image can be opened using 7-Zip, after navigating around
-the file system, a file named `credentials.txt` in the `Documents` directory
-caught my attention. It reads:
+The attachment is 25 MiB! Unpacking the ZIP file gives two files: a text file
+with some instructions specific for MacOS, and a `.ntfs` image. The image can
+be opened using 7-Zip, after navigating around the file system, a file named
+`credentials.txt` in the `Documents` directory caught my attention. It reads:
 
 ```
 I keep pictures of my credentials in extended attributes.
