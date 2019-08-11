@@ -48,7 +48,7 @@ interesting. I then tried to look for a domain-like strings using `strings` and
 `netcat` did:
 
 ```
-$ netcat satellite.ctfcompetition.com 1337
+$ nc satellite.ctfcompetition.com 1337
 Welcome. Enter (a) to display config data, (b) to erase all data or (c) to disconnect
 a
 Username: brewtoot password: CTF{4efcc72090af28fd33a2118985541f92e793477f}
