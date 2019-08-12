@@ -22,7 +22,7 @@ This quest links to a
 [YouTube video](https://www.youtube.com/watch?v=QzFuwljOj8Y) which supposedly
 contains a flag. The video is a promotional video for Google CTF 2019 event,
 and at around `0:17`, a flag is shown on the screen for one frame. Note that
-`,` and `.` keys can be used to rewind or forward frame by frame.
+`,` and `.` keys can be used to rewind and forward one frame at a time.
 
 The flag is `CTF{9e796ca74932912c216a1cd00c25c84fae00e139}`.
 
@@ -133,12 +133,12 @@ Use the man command for information on other programs.
 After playing around in the shell, I found out that the flag is located in
 `/challenge/README.flag`, and I have read access to it. Unfortunately, the
 usual commands that dump file content are not available and the shell does not
-support operators. It looks like the shell simply finds the file that matches
-the first part of input command in `/bin` and pass the rest as arguments. It
-also rejects the command if the first part contains `busybox`.
+support operators. It looks like the shell simply finds and execute the file
+that matches the first part of input command in `/bin` and pass the rest as
+arguments. It also rejects the command if the first part contains `busybox`.
 
 After playing around with it a bit more, I found a path traversal
-vulnerability when the shell tries to find the binary to execute. After running
+vulnerability when the shell tries to find the file to execute. After running
 through a few directories, two executables caught my attention: `/bin/lzop` and
 `/usr/bin/lzopcat`. Combining these two executables with the path traversal
 vulnerability, the flag can be extracted:
@@ -153,4 +153,4 @@ CTF{4ll_D474_5h4ll_B3_Fr33}
 
 I'm really impressed that Google managed to create completely different quests
 from last year while keeping the quality high. I'll certainly look into other
-quests when I have time. In the meantime, why not go try them out yourself?
+quests later. In the meantime, why not go try them out yourself?

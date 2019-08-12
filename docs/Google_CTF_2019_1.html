@@ -38,7 +38,7 @@ Arrived at the flag. Congrats, your flag is: CTF{welcome_to_googlectf}
 <a href="https://www.youtube.com/watch?v=QzFuwljOj8Y">YouTube video</a> which supposedly
 contains a flag. The video is a promotional video for Google CTF 2019 event,
 and at around <code>0:17</code>, a flag is shown on the screen for one frame. Note that
-<code>,</code> and <code>.</code> keys can be used to rewind or forward frame by frame.</p>
+<code>,</code> and <code>.</code> keys can be used to rewind and forward one frame at a time.</p>
 <p>The flag is <code>CTF{9e796ca74932912c216a1cd00c25c84fae00e139}</code>.</p>
 <h2 id="satellite">Satellite</h2>
 <p>Apparently the previous quest is optional, in fact, it doesn't even show up on
@@ -116,11 +116,11 @@ Use the man command for information on other programs.
 <p>After playing around in the shell, I found out that the flag is located in
 <code>/challenge/README.flag</code>, and I have read access to it. Unfortunately, the
 usual commands that dump file content are not available and the shell does not
-support operators. It looks like the shell simply finds the file that matches
-the first part of input command in <code>/bin</code> and pass the rest as arguments. It
-also rejects the command if the first part contains <code>busybox</code>.</p>
+support operators. It looks like the shell simply finds and execute the file
+that matches the first part of input command in <code>/bin</code> and pass the rest as
+arguments. It also rejects the command if the first part contains <code>busybox</code>.</p>
 <p>After playing around with it a bit more, I found a path traversal
-vulnerability when the shell tries to find the binary to execute. After running
+vulnerability when the shell tries to find the file to execute. After running
 through a few directories, two executables caught my attention: <code>/bin/lzop</code> and
 <code>/usr/bin/lzopcat</code>. Combining these two executables with the path traversal
 vulnerability, the flag can be extracted:</p>
@@ -131,7 +131,7 @@ CTF{4ll_D474_5h4ll_B3_Fr33}
 <h2 id="conclusion">Conclusion</h2>
 <p>I'm really impressed that Google managed to create completely different quests
 from last year while keeping the quality high. I'll certainly look into other
-quests when I have time. In the meantime, why not go try them out yourself?</p></div>
+quests later. In the meantime, why not go try them out yourself?</p></div>
 
     <div class="container footer">
         <p>By Hugo Xu (@jspenguin2017)</p>
