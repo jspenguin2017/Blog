@@ -111,3 +111,46 @@ And there is the flag. As a cleanup, the image can be unmounted with:
 ```
 $ sudo umount family
 ```
+
+## Work Computer
+
+Although this quest gave a pretty long description, it's just a story and
+offers no clues at all. It does give a domain and a port though, let's connect
+to it:
+
+```
+$ nc readme.ctfcompetition.com 1337
+> help
+Alien's shell
+Type program names and arguments, and hit enter.
+The following are built in:
+  cd
+  help
+  exit
+Use the man command for information on other programs.
+```
+
+After playing around in the shell, I found out that the flag is located in
+`/challenge/README.flag`, and I have read access to it. Unfortunately, the
+usual commands that dump file content are not available and the shell does not
+support operators. It looks like the shell simply finds the file that matches
+the first part of input command in `/bin` and pass the rest as arguments. It
+also rejects the command if the first part contains `busybox`.
+
+After playing around with it a bit more, I found a path traversal
+vulnerability when the shell tries to find the binary to execute. After running
+through a few directories, two executables caught my attention: `/bin/lzop` and
+`/usr/bin/lzopcat`. Combining these two executables with the path traversal
+vulnerability, the flag can be extracted:
+
+```
+> lzop README.flag
+> ../usr/bin/lzopcat README.flag.lzo
+CTF{4ll_D474_5h4ll_B3_Fr33}
+```
+
+## Conclusion
+
+I'm really impressed that Google managed to create completely different quests
+from last year while keeping the quality high. I'll certainly look into other
+quests when I have time. In the meantime, why not go try them out yourself?

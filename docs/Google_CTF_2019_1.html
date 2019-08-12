@@ -98,7 +98,40 @@ CTF{congratsyoufoundmycreds}
 </code></pre>
 <p>And there is the flag. As a cleanup, the image can be unmounted with:</p>
 <pre><code>$ sudo umount family
-</code></pre></div>
+</code></pre>
+<h2 id="workcomputer">Work Computer</h2>
+<p>Although this quest gave a pretty long description, it's just a story and
+offers no clues at all. It does give a domain and a port though, let's connect
+to it:</p>
+<pre><code>$ nc readme.ctfcompetition.com 1337
+&gt; help
+Alien's shell
+Type program names and arguments, and hit enter.
+The following are built in:
+  cd
+  help
+  exit
+Use the man command for information on other programs.
+</code></pre>
+<p>After playing around in the shell, I found out that the flag is located in
+<code>/challenge/README.flag</code>, and I have read access to it. Unfortunately, the
+usual commands that dump file content are not available and the shell does not
+support operators. It looks like the shell simply finds the file that matches
+the first part of input command in <code>/bin</code> and pass the rest as arguments. It
+also rejects the command if the first part contains <code>busybox</code>.</p>
+<p>After playing around with it a bit more, I found a path traversal
+vulnerability when the shell tries to find the binary to execute. After running
+through a few directories, two executables caught my attention: <code>/bin/lzop</code> and
+<code>/usr/bin/lzopcat</code>. Combining these two executables with the path traversal
+vulnerability, the flag can be extracted:</p>
+<pre><code>&gt; lzop README.flag
+&gt; ../usr/bin/lzopcat README.flag.lzo
+CTF{4ll_D474_5h4ll_B3_Fr33}
+</code></pre>
+<h2 id="conclusion">Conclusion</h2>
+<p>I'm really impressed that Google managed to create completely different quests
+from last year while keeping the quality high. I'll certainly look into other
+quests when I have time. In the meantime, why not go try them out yourself?</p></div>
 
     <div class="container footer">
         <p>By Hugo Xu (@jspenguin2017)</p>
