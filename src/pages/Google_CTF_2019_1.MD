@@ -99,7 +99,7 @@ $ cd Users/Family/Documents
 $ getfattr --name=user.FILE0 --only-values credentials.txt > credentials.png
 ```
 
-Open the file with an image viewer:
+Open the file with a picture viewer:
 
 ```
 Logins for socialnetwork & govnetwork:
