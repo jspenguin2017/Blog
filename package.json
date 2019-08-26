@@ -9,12 +9,12 @@
   },
   "description": "Blog builder",
   "engines": {
-    "node": "12.9.0"
+    "node": "12.9.1"
   },
   "homepage": "https://blog.hugoxu.com/",
   "license": "GPL-3.0",
   "name": "blog-build",
   "private": true,
   "repository": "https://github.com/jspenguin2017/Blog",
-  "version": "1.0.4"
+  "version": "1.0.5"
 }
