@@ -63,7 +63,7 @@ used to parse my menu choice input, it would be easy to exploit if I can make
 systems have Address Space Layout Randomization (ASLR), and a static payload
 would not work.
 
-I spent some time creating a 
+I spent some time creating a
 [Node.js library](https://github.com/jspenguin2017/Blog/tree/master/tools/lib)
 that allow my scripts to react to different server response over `netcat`.
 Since I can't directly read the address of `system`, I have to calculate it
