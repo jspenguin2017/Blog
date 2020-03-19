@@ -87,7 +87,7 @@ const index_content = (config) => {
 const fix_line_ending = (text) => {
     return text
         .split("\n")
-        .map((line) => line.trimEnd())
+        .map((line) => line.replace(/\r$/, ""))
         .join(os.EOL);
 };
 
