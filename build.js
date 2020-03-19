@@ -79,6 +79,21 @@ const index_content = (config) => {
 /*****************************************************************************/
 
 /**
+ * Change all line endings to match the default line ending of current
+ * platform.
+ * @param {string} text - The input text.
+ * @return {string} The text with line endings normalized.
+ */
+const fix_line_ending = (text) => {
+    return text
+        .split("\n")
+        .map((line) => line.trimEnd())
+        .join(os.EOL);
+};
+
+/*****************************************************************************/
+
+/**
  * Main function.
  * @async @function
  */
@@ -90,12 +105,12 @@ const main = async () => {
     await fs.copy("./src/css/index.css", "./docs/index.css");
     await fs.copy("./src/css/page.css", "./docs/page.css");
 
-    let index = await fs.readFile("./src/index.html", "utf8")
+    let index = await fs.readFile("./src/index.html", "utf8");
     index = index
         .replace("{{csp}}", config.csp)
         .replace("{{title-suffix}}", config.suffix)
         .replace("{{content}}", index_content(config));
-    await fs.writeFile("./docs/index.html", index, "utf8");
+    await fs.writeFile("./docs/index.html", fix_line_ending(index), "utf8");
 
     let template = await fs.readFile("./src/page.html", "utf8");
     template = template
@@ -103,13 +118,20 @@ const main = async () => {
         .replace("{{title-suffix}}", config.suffix);
 
     for (const page of config.pages) {
-        let content = await fs.readFile("./src/pages/" + page.src + ".MD", "utf8");
+        let content = await fs.readFile(
+            "./src/pages/" + page.src + ".MD",
+            "utf8",
+        );
         content = converter.makeHtml(content);
 
         let output = template
             .replace("{{title}}", page.title)
             .replace("{{content}}", content);
-        await fs.writeFile("./docs/" + page.src + ".html", output, "utf8");
+        await fs.writeFile(
+            "./docs/" + page.src + ".html",
+            fix_line_ending(output),
+            "utf8",
+        );
     }
 };
 

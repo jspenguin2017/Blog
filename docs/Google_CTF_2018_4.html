@@ -75,7 +75,7 @@ used to parse my menu choice input, it would be easy to exploit if I can make
 <code>atoi</code> point to <code>system</code>. But there is another problem, modern operating
 systems have Address Space Layout Randomization (ASLR), and a static payload
 would not work.</p>
-<p>I spent some time creating a 
+<p>I spent some time creating a
 <a href="https://github.com/jspenguin2017/Blog/tree/master/tools/lib">Node.js library</a>
 that allow my scripts to react to different server response over <code>netcat</code>.
 Since I can't directly read the address of <code>system</code>, I have to calculate it
