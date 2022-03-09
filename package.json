@@ -5,7 +5,7 @@
   },
   "dependencies": {
     "fs-extra": "10.0.1",
-    "showdown": "2.0.2"
+    "showdown": "2.0.3"
   },
   "description": "Blog builder",
   "engines": {
@@ -16,5 +16,5 @@
   "name": "blog-build",
   "private": true,
   "repository": "https://github.com/jspenguin2017/Blog",
-  "version": "1.0.53"
+  "version": "1.0.54"
 }
