@@ -1,59 +1,45 @@
-/******************************************************************************
+// ------------------------------------------------------------------------------------------------------------------ //
 
-    Blog - My personal blog
-    Copyright (C) 2018  Hugo Xu
+// Blog - My personal blog
+// Copyright (C) 2018-2022  Hugo Xu
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+// ------------------------------------------------------------------------------------------------------------------ //
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+// Blog build script
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-*******************************************************************************
-
-    Blog build script
-
-******************************************************************************/
+// ------------------------------------------------------------------------------------------------------------------ //
 
 "use strict";
 
-/*****************************************************************************/
+// ------------------------------------------------------------------------------------------------------------------ //
 
 process.on("unhandledRejection", (e) => {
     throw e;
 });
 
-/*****************************************************************************/
+// ------------------------------------------------------------------------------------------------------------------ //
 
-/**
- * Modules.
- * @const {Module}
- */
 const fs = require("fs-extra");
 const os = require("os");
 const showdown = require("showdown");
 
-/**
- * Showdown converter.
- * @const {Converter}
- */
 const converter = new showdown.Converter();
 
-/*****************************************************************************/
+// ------------------------------------------------------------------------------------------------------------------ //
 
-/**
- * Generate content of the index file.
- * @function
- * @param {Object} config - The configuration object.
- * @return {string} The generated content.
- */
 const index_content = (config) => {
     let result = "";
 
@@ -76,14 +62,8 @@ const index_content = (config) => {
     return result;
 };
 
-/*****************************************************************************/
+// ------------------------------------------------------------------------------------------------------------------ //
 
-/**
- * Change all line endings to match the default line ending of current
- * platform.
- * @param {string} text - The input text.
- * @return {string} The text with line endings normalized.
- */
 const fix_line_ending = (text) => {
     return text
         .split("\n")
@@ -91,12 +71,8 @@ const fix_line_ending = (text) => {
         .join(os.EOL);
 };
 
-/*****************************************************************************/
+// ------------------------------------------------------------------------------------------------------------------ //
 
-/**
- * Main function.
- * @async @function
- */
 const main = async () => {
     let config = await fs.readFile("./src/config.json", "utf8");
     config = JSON.parse(config);
@@ -118,23 +94,16 @@ const main = async () => {
         .replace("{{title-suffix}}", config.suffix);
 
     for (const page of config.pages) {
-        let content = await fs.readFile(
-            "./src/pages/" + page.src + ".MD",
-            "utf8",
-        );
+        let content = await fs.readFile("./src/pages/" + page.src + ".MD", "utf8");
         content = converter.makeHtml(content);
 
         let output = template
             .replace("{{title}}", page.title)
             .replace("{{content}}", content);
-        await fs.writeFile(
-            "./docs/" + page.src + ".html",
-            fix_line_ending(output),
-            "utf8",
-        );
+        await fs.writeFile("./docs/" + page.src + ".html", fix_line_ending(output), "utf8");
     }
 };
 
 main();
 
-/*****************************************************************************/
+// ------------------------------------------------------------------------------------------------------------------ //

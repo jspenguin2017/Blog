@@ -7,14 +7,17 @@
     "fs-extra": "10.0.1",
     "showdown": "2.0.3"
   },
-  "description": "Blog builder",
+  "description": "My personal blog",
   "engines": {
     "node": "16.14.0"
   },
   "homepage": "https://blog.hugoxu.com/",
   "license": "GPL-3.0",
-  "name": "blog-build",
+  "name": "blog",
   "private": true,
   "repository": "https://github.com/jspenguin2017/Blog",
-  "version": "1.0.54"
+  "scripts": {
+    "build": "node build"
+  },
+  "version": "1.1.0"
 }
