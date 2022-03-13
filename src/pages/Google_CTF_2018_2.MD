@@ -72,8 +72,8 @@ abcd
 Incorrect, the authorities have been informed!
 ```
 
-Ops, that's not good. It's a good habit to always read patch notes, so let's do
-that.
+Oops, that's not good. It's a good habit to always read patch notes, so let's
+do that.
 
 ```
 [...]
@@ -175,7 +175,7 @@ async function x(password) {
 ```
 
 The `code` string is pretty long, it's probably easier to log out what it does
-in runtime:
+during runtime:
 
 ```JavaScript
 // [...]
@@ -335,8 +335,8 @@ After just a few seconds, I got a reply, probably from a bot:
 ```
 Thanks for the link!
 
-Thanks for the  
-link "https://blog.hugoxu.com/other/Google_CTF_2018_2/portal.html", I'll  
+Thanks for the
+link "https://blog.hugoxu.com/other/Google_CTF_2018_2/portal.html", I'll
 check it out as soon as possible!
 ```
 

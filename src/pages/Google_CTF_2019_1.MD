@@ -72,7 +72,7 @@ be more secrets in this binary yet to be discovered.
 ## Home Computer
 
 The attachment is 25 MiB! Unpacking the ZIP file gives two files: a text file
-with some instructions specific for MacOS, and a `.ntfs` image. The image can
+with some instructions specific for macOS, and a `.ntfs` image. The image can
 be opened using 7-Zip, after navigating around the file system, a file named
 `credentials.txt` in the `Documents` directory caught my attention. It reads:
 
