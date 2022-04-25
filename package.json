@@ -5,7 +5,7 @@
   },
   "dependencies": {
     "fs-extra": "10.1.0",
-    "showdown": "2.0.4"
+    "showdown": "2.1.0"
   },
   "description": "My personal blog",
   "engines": {
@@ -19,5 +19,5 @@
   "scripts": {
     "build": "node build"
   },
-  "version": "1.1.4"
+  "version": "1.1.5"
 }
