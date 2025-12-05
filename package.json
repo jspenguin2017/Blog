@@ -4,7 +4,7 @@
     "url": "https://github.com/jspenguin2017/Blog/issues"
   },
   "dependencies": {
-    "fs-extra": "11.2.0",
+    "fs-extra": "11.3.2",
     "showdown": "2.1.0"
   },
   "description": "My personal blog",
@@ -19,5 +19,5 @@
   "scripts": {
     "build": "node build"
   },
-  "version": "1.1.21"
+  "version": "1.1.22"
 }
