@@ -9,7 +9,7 @@
   },
   "description": "My personal blog",
   "engines": {
-    "node": "20.19.6"
+    "node": "22.21.1"
   },
   "homepage": "https://blog.hugoxu.com/",
   "license": "GPL-3.0",
@@ -19,5 +19,5 @@
   "scripts": {
     "build": "node build"
   },
-  "version": "1.1.22"
+  "version": "1.1.23"
 }
